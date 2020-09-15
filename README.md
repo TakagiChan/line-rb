@@ -7,13 +7,16 @@ $ gem install linerb
 #lib/example.rb
 #Use -W0 to avoid duplication warnings
 
-LineClient.new(authToken: "", certificate: "")
+require "linerb"
+
+client = LineClient.new(authToken: "", certificate: "")
 client.doAuthService
 talkClient = client.getTalkService
 pollClient = client.getPollService
 
 talk = TalkApi.new(talkClient)
 talk.send(:api_sendMessage, text: "Test", to: "gid")
+
 ```
 
 ### gen-rb made by TakagiChanParser
