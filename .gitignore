@@ -8,6 +8,7 @@
 /tmp/
 /bin/
 Gemfile
+Rakefile
 *.lock
 *.gemspec
 *.txt
