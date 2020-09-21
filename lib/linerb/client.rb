@@ -1,38 +1,32 @@
-$:.push('./gen-rb')
-
 require_relative 'auth'
 require_relative 'gen-rb/talk_service'
 
 class LineClient
 
-  def initialize(authToken:, certificate:)
-    @a = authToken
-    @c = certificate
+  def initialize(auth_token:, certificate:)
+    @auth = auth_token
+    @cert = certificate
   end
 
-  def doAuthService
-    Auth.new(authToken: @a, certificate: @c).login
-  end
-
-  def getTalkService
+  def get_talk_service
     transport = Thrift::HTTPClientTransport.new(Config::TALK_SERVICE_V4_URL)
     transport.add_headers(Config::HEADERS)
 
     protocol = Thrift::CompactProtocol.new(transport)
 
-    client = TalkService::Client.new(protocol)
-
-    return client
+    TalkService::Client.new(protocol)
   end
 
-  def getPollService
+  def get_poll_service
     transport = Thrift::HTTPClientTransport.new(Config::POLL_SERVICE_V4_URL)
     transport.add_headers(Config::HEADERS)
 
     protocol = Thrift::CompactProtocol.new(transport)
 
-    client = TalkService::Client.new(protocol)
+    TalkService::Client.new(protocol)
+  end
 
-    return client
+  def do_auth_service
+    Auth.new(auth_token: @auth, certificate: @cert).login
   end
 end

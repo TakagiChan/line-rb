@@ -1,6 +1,3 @@
-$:.push('./gen-rb')
-
-require 'thrift'
 require 'openssl'
 require "base64"
 require 'cgi'
@@ -16,9 +13,9 @@ begin
 
   class Auth
 
-    def initialize(authToken:, certificate:)
-      @a = authToken
-      @c = certificate
+    def initialize(auth_token:, certificate:)
+      @auth = auth_token
+      @cert = certificate
 
       #authToken login is in progress
     end
@@ -28,95 +25,99 @@ begin
       transport = Thrift::HTTPClientTransport.new(url)
       transport.add_headers(headers)
 
-      protocol = Thrift::CompactProtocol.new(transport)
-
-      return protocol
+      Thrift::CompactProtocol.new(transport)
     end
 
     def login
       protocol = client_proto(Config::LOGIN_URL, Config::HEADERS)
-      loginClient = SecondaryQrcodeLoginService::Client.new(protocol)
+      login_client = SecondaryQrcodeLoginService::Client.new(protocol)
 
-      sessionId = loginClient.createSession(CreateQrSessionRequest).authSessionId
+      session_id = login_client.createSession(CreateQrSessionRequest).authSessionId
 
       qr_req = CreateQrCodeRequest.new
-      qr_req::authSessionId = sessionId
+      qr_req::authSessionId = session_id
 
-      qr_url = loginClient.createQrCode(qr_req).callbackUrl
+      qr_url = login_client.createQrCode(qr_req).callbackUrl
 
       secret = Base64.strict_encode64(SecureRandom.base64(32))
       version = 1
       e2ee = "?secret=#{secret}" + "&e2eeVersion=#{version}"
-      puts "[LOGIN] => " + qr_url + e2ee
+      puts "LINE-RB: [LOGIN] => #{qr_url}#{e2ee}"
 
       Config::HEADERS[:"X-Line-Access"] = ""
 
       protocol = client_proto(Config::PERMIT_NOTICE_URL, Config::HEADERS)
-      certClient = SecondaryQrCodeLoginPermitNoticeService::Client.new(protocol)
+      cert_client = SecondaryQrCodeLoginPermitNoticeService::Client.new(protocol)
 
       qr_check = CheckQrCodeVerifiedRequest.new
-      qr_check::authSessionId = sessionId
+      qr_check::authSessionId = session_id
 
       begin
-        certClient.checkQrCodeVerified(qr_check)
+        cert_client.checkQrCodeVerified(qr_check)
 
       rescue Net::ReadTimeout
-        puts "[Timeout] QrCode verification"
+        puts "\nLINE-RB: [Timeout] QrCode verification\n"
         exit(1)
       end
 
       Config::HEADERS.delete(:"X-Line-Access") #=> ""
 
       protocol = client_proto(Config::LOGIN_URL, Config::HEADERS)
-      loginClient = SecondaryQrcodeLoginService::Client.new(protocol)
+      login_client = SecondaryQrcodeLoginService::Client.new(protocol)
 
       begin
 
         certificate_check = VerifyCertificateRequest.new
-        certificate_check::authSessionId = sessionId
-        certificate_check::certificate = @certificate
+        certificate_check::authSessionId = session_id
+        certificate_check::certificate = @cert
 
-        loginClient.verifyCertificate(certificate_check)
+        login_client.verifyCertificate(certificate_check)
 
         login_req = QrCodeLoginRequest.new
-        login_req.authSessionId = sessionId
+        login_req.authSessionId = session_id
         login_req.systemName = "Ruby on Rails"
         login_req.autoLoginIsRequired = FALSE
 
-        res = loginClient.qrCodeLogin(login_req)
+        res = login_client.qrCodeLogin(login_req)
 
-        puts "[CERT] => " + res.certificate
-        puts "[TOKEN] => " + res.accessToken
+        #DO NOT SHOW IN PUBLIC
+        #DO NOT EDIT IF YOU DONT KNOW WHAT YOU ARE DOING
+        #puts "LINE-RB: [CERT] " + Base64.strict_encode64(res.certificate)
+        #puts "LINE-RB: [TOKEN] " + Base64.strict_encode64(res.accessToken)
 
         Config::HEADERS[:"X-Line-Access"] = res.accessToken
 
       rescue SecondaryQrCodeException
         pin_req = CreatePinCodeRequest.new
-        pin_req::authSessionId = sessionId
-        pincode = loginClient.createPinCode(pin_req).pinCode
+        pin_req::authSessionId = session_id
+        pincode = login_client.createPinCode(pin_req).pinCode
 
-        if pincode != nil then
-          puts "[PIN] => " + pincode
+        if pincode != nil
+          puts "LINE-RB: [PIN] => #{pincode}\n"
           pin_check = CheckPinCodeVerifiedRequest.new
-          pin_check::authSessionId = sessionId
+          pin_check::authSessionId = session_id
 
           begin
-            certClient.checkPinCodeVerified(pin_check)
+            cert_client.checkPinCodeVerified(pin_check)
 
             login_req = QrCodeLoginRequest.new
-            login_req.authSessionId = sessionId
+            login_req.authSessionId = session_id
             login_req.systemName = "Ruby on Rails"
             login_req.autoLoginIsRequired = FALSE
 
-            res = loginClient.qrCodeLogin(login_req)
+            res = login_client.qrCodeLogin(login_req)
 
-            puts "[CERT] => " + res.certificate
-            puts "[TOKEN] => " + res.accessToken
+            #DO NOT SHOW IN PUBLIC
+            #DO NOT EDIT IF YOU DONT KNOW WHAT YOU ARE DOING
+            #puts "LINE-RB: [CERT] " + Base64.strict_encode64(res.certificate)
+            #puts "LINE-RB: [TOKEN] " + Base64.strict_encode64(res.accessToken)
 
             Config::HEADERS[:"X-Line-Access"] = res.accessToken
 
+            puts "\nLINE-RB: [LOGIN SUCCESS]\n"
+
           rescue Net::ReadTimeout
-            puts "[Timeout] PinCode verification"
+            puts "\nLINE-RB: [Timeout] PinCode verification\n"
             exit(1)
           end
         end
