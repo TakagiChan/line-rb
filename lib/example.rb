@@ -1,10 +1,4 @@
-require_relative './linerb/config'
-require_relative './linerb/client'
-
-require_relative './linerb/api/talkApi'
-require_relative './linerb/api/pollApi'
-
-require 'async'
+require 'linerb'
 
 #USE -W0 --jit
 
