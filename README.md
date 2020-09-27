@@ -42,6 +42,11 @@ class PollRecv
                          #Optional you dont need pass this args
                          :contentType => J0_a_e_a_b_c9::NONE)
       end
+      if op::type == J0_a_e_a_b_nd::NOTIFIED_INVITE_INTO_CHAT
+        gid = op::param1
+        Client.talk.send(:api_acceptChatInvitation, chatMid: gid)
+        Client.talk.send(:api_sendMessage, text: "text", to: gid)
+      end
     end
   end
 
@@ -49,7 +54,7 @@ class PollRecv
 end
 
 Async do
-  Client.poll.send(:api_fetch_ops)
+  Client.poll.send(:api_fetch_operations)
 end
 
 ```
@@ -61,6 +66,8 @@ end
 [TakagiChanParser](https://github.com/TakagiChan/LineThriftParsed)
 
 ### Contact
+
+[Discord Group](https://discord.gg/udujncd)
 
 [Twitter](https://twitter.com/TakagiChanDayo)
 
