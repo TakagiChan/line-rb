@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require_relative 'takagi_chan_types'
+require 'takagi_chan_types'
 
 module AuthService
   class Client
@@ -134,6 +134,7 @@ module AuthService
 
     def recv_respondE2EELoginRequest()
       result = receive_message(RespondE2EELoginRequest_result)
+      raise result.e unless result.e.nil?
       return
     end
 
@@ -318,7 +319,11 @@ module AuthService
     def process_respondE2EELoginRequest(seqid, iprot, oprot)
       args = read_args(iprot, RespondE2EELoginRequest_args)
       result = RespondE2EELoginRequest_result.new()
-      @handler.respondE2EELoginRequest(args.verifier, args.publicKey, args.encryptedKeyChain, args.hashKeyChain, args.errorCode)
+      begin
+        @handler.respondE2EELoginRequest(args.verifier, args.publicKey, args.encryptedKeyChain, args.hashKeyChain, args.errorCode)
+      rescue ::TalkException => e
+        result.e = e
+      end
       write_result(result, oprot, 'respondE2EELoginRequest', seqid)
     end
 
@@ -653,13 +658,13 @@ module AuthService
       PUBLICKEY => {:type => ::Thrift::Types::STRUCT, :name => 'publicKey', :class => ::E2EEPublicKey},
       ENCRYPTEDKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'encryptedKeyChain'},
       HASHKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'hashKeyChain'},
-      ERRORCODE => {:type => ::Thrift::Types::I32, :name => 'errorCode', :enum_class => ::J0_a_e_a_b_ba}
+      ERRORCODE => {:type => ::Thrift::Types::I32, :name => 'errorCode', :enum_class => ::P0_a_e_a_b_ca}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @errorCode.nil? || ::J0_a_e_a_b_ba::VALID_VALUES.include?(@errorCode)
+      unless @errorCode.nil? || ::P0_a_e_a_b_ca::VALID_VALUES.include?(@errorCode)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field errorCode!')
       end
     end
@@ -669,9 +674,10 @@ module AuthService
 
   class RespondE2EELoginRequest_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
 
     FIELDS = {
-
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -689,13 +695,13 @@ module AuthService
 
     FIELDS = {
       AUTHSESSIONID => {:type => ::Thrift::Types::STRING, :name => 'authSessionId'},
-      IDENTITYPROVIDER => {:type => ::Thrift::Types::I32, :name => 'identityProvider', :enum_class => ::J0_a_e_a_b_rc}
+      IDENTITYPROVIDER => {:type => ::Thrift::Types::I32, :name => 'identityProvider', :enum_class => ::P0_a_e_a_b_sc}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @identityProvider.nil? || ::J0_a_e_a_b_rc::VALID_VALUES.include?(@identityProvider)
+      unless @identityProvider.nil? || ::P0_a_e_a_b_sc::VALID_VALUES.include?(@identityProvider)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field identityProvider!')
       end
     end

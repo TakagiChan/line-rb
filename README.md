@@ -4,9 +4,12 @@ $ gem install linerb
 ```
 ## Usage
 ```ruby
-#lib/example.rb
 
-#USE -W0 --jit
+# Please read example.rb basically README is outdated
+
+# lib/example.rb
+
+# USE -W0 --jit
 
 require 'linerb'
 

@@ -89,54 +89,6 @@ module TalkService
       return
     end
 
-    def getLastOpRevision()
-      send_getLastOpRevision()
-      return recv_getLastOpRevision()
-    end
-
-    def send_getLastOpRevision()
-      send_message('getLastOpRevision', GetLastOpRevision_args)
-    end
-
-    def recv_getLastOpRevision()
-      result = receive_message(GetLastOpRevision_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getLastOpRevision failed: unknown result')
-    end
-
-    def fetchOperations(localRev, count)
-      send_fetchOperations(localRev, count)
-      return recv_fetchOperations()
-    end
-
-    def send_fetchOperations(localRev, count)
-      send_message('fetchOperations', FetchOperations_args, :localRev => localRev, :count => count)
-    end
-
-    def recv_fetchOperations()
-      result = receive_message(FetchOperations_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'fetchOperations failed: unknown result')
-    end
-
-    def fetchOps(localRev, count, globalRev, individualRev)
-      send_fetchOps(localRev, count, globalRev, individualRev)
-      return recv_fetchOps()
-    end
-
-    def send_fetchOps(localRev, count, globalRev, individualRev)
-      send_message('fetchOps', FetchOps_args, :localRev => localRev, :count => count, :globalRev => globalRev, :individualRev => individualRev)
-    end
-
-    def recv_fetchOps()
-      result = receive_message(FetchOps_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'fetchOps failed: unknown result')
-    end
-
     def reportDeviceState(booleanState, stringState)
       send_reportDeviceState(booleanState, stringState)
       recv_reportDeviceState()
@@ -210,6 +162,7 @@ module TalkService
 
     def recv_updateExtendedProfileAttribute()
       result = receive_message(UpdateExtendedProfileAttribute_result)
+      raise result.e unless result.e.nil?
       return
     end
 
@@ -246,7 +199,7 @@ module TalkService
 
     def createChatRoomAnnouncement(reqSeq, chatRoomMid, type, contents)
       send_createChatRoomAnnouncement(reqSeq, chatRoomMid, type, contents)
-      recv_createChatRoomAnnouncement()
+      return recv_createChatRoomAnnouncement()
     end
 
     def send_createChatRoomAnnouncement(reqSeq, chatRoomMid, type, contents)
@@ -255,7 +208,9 @@ module TalkService
 
     def recv_createChatRoomAnnouncement()
       result = receive_message(CreateChatRoomAnnouncement_result)
-      return
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'createChatRoomAnnouncement failed: unknown result')
     end
 
     def createRoomV2(reqSeq, contactIds)
@@ -431,512 +386,36 @@ module TalkService
       return
     end
 
-    def respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
-      send_respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
-      recv_respondE2EEKeyExchange()
+    def getEncryptedIdentityV3()
+      send_getEncryptedIdentityV3()
+      return recv_getEncryptedIdentityV3()
     end
 
-    def send_respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
-      send_message('respondE2EEKeyExchange', RespondE2EEKeyExchange_args, :reqSeq => reqSeq, :encryptedKeyChain => encryptedKeyChain, :hashKeyChain => hashKeyChain)
+    def send_getEncryptedIdentityV3()
+      send_message('getEncryptedIdentityV3', GetEncryptedIdentityV3_args)
     end
 
-    def recv_respondE2EEKeyExchange()
-      result = receive_message(RespondE2EEKeyExchange_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def getBlockedRecommendationIds(syncReason)
-      send_getBlockedRecommendationIds(syncReason)
-      return recv_getBlockedRecommendationIds()
-    end
-
-    def send_getBlockedRecommendationIds(syncReason)
-      send_message('getBlockedRecommendationIds', GetBlockedRecommendationIds_args, :syncReason => syncReason)
-    end
-
-    def recv_getBlockedRecommendationIds()
-      result = receive_message(GetBlockedRecommendationIds_result)
+    def recv_getEncryptedIdentityV3()
+      result = receive_message(GetEncryptedIdentityV3_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getBlockedRecommendationIds failed: unknown result')
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getEncryptedIdentityV3 failed: unknown result')
     end
 
-    def negotiateE2EEPublicKey(mid)
-      send_negotiateE2EEPublicKey(mid)
-      return recv_negotiateE2EEPublicKey()
+    def findAndAddContactsByPhone(reqSeq, phones, reference)
+      send_findAndAddContactsByPhone(reqSeq, phones, reference)
+      return recv_findAndAddContactsByPhone()
     end
 
-    def send_negotiateE2EEPublicKey(mid)
-      send_message('negotiateE2EEPublicKey', NegotiateE2EEPublicKey_args, :mid => mid)
+    def send_findAndAddContactsByPhone(reqSeq, phones, reference)
+      send_message('findAndAddContactsByPhone', FindAndAddContactsByPhone_args, :reqSeq => reqSeq, :phones => phones, :reference => reference)
     end
 
-    def recv_negotiateE2EEPublicKey()
-      result = receive_message(NegotiateE2EEPublicKey_result)
+    def recv_findAndAddContactsByPhone()
+      result = receive_message(FindAndAddContactsByPhone_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'negotiateE2EEPublicKey failed: unknown result')
-    end
-
-    def sendMessage(seq, message)
-      send_sendMessage(seq, message)
-      return recv_sendMessage()
-    end
-
-    def send_sendMessage(seq, message)
-      send_message('sendMessage', SendMessage_args, :seq => seq, :message => message)
-    end
-
-    def recv_sendMessage()
-      result = receive_message(SendMessage_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'sendMessage failed: unknown result')
-    end
-
-    def sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
-      send_sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
-      recv_sendChatRemoved()
-    end
-
-    def send_sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
-      send_message('sendChatRemoved', SendChatRemoved_args, :seq => seq, :chatMid => chatMid, :lastMessageId => lastMessageId, :sessionId => sessionId)
-    end
-
-    def recv_sendChatRemoved()
-      result = receive_message(SendChatRemoved_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def removeAllMessages(seq, lastMessageId)
-      send_removeAllMessages(seq, lastMessageId)
-      recv_removeAllMessages()
-    end
-
-    def send_removeAllMessages(seq, lastMessageId)
-      send_message('removeAllMessages', RemoveAllMessages_args, :seq => seq, :lastMessageId => lastMessageId)
-    end
-
-    def recv_removeAllMessages()
-      result = receive_message(RemoveAllMessages_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def updateAccountMigrationPincode(accountMigrationPincode)
-      send_updateAccountMigrationPincode(accountMigrationPincode)
-      recv_updateAccountMigrationPincode()
-    end
-
-    def send_updateAccountMigrationPincode(accountMigrationPincode)
-      send_message('updateAccountMigrationPincode', UpdateAccountMigrationPincode_args, :accountMigrationPincode => accountMigrationPincode)
-    end
-
-    def recv_updateAccountMigrationPincode()
-      result = receive_message(UpdateAccountMigrationPincode_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def inviteIntoRoom(reqSeq, roomId, contactIds)
-      send_inviteIntoRoom(reqSeq, roomId, contactIds)
-      recv_inviteIntoRoom()
-    end
-
-    def send_inviteIntoRoom(reqSeq, roomId, contactIds)
-      send_message('inviteIntoRoom', InviteIntoRoom_args, :reqSeq => reqSeq, :roomId => roomId, :contactIds => contactIds)
-    end
-
-    def recv_inviteIntoRoom()
-      result = receive_message(InviteIntoRoom_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def findAndAddContactsByMid(reqSeq, mid, type, reference)
-      send_findAndAddContactsByMid(reqSeq, mid, type, reference)
-      return recv_findAndAddContactsByMid()
-    end
-
-    def send_findAndAddContactsByMid(reqSeq, mid, type, reference)
-      send_message('findAndAddContactsByMid', FindAndAddContactsByMid_args, :reqSeq => reqSeq, :mid => mid, :type => type, :reference => reference)
-    end
-
-    def recv_findAndAddContactsByMid()
-      result = receive_message(FindAndAddContactsByMid_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByMid failed: unknown result')
-    end
-
-    def getCountryWithRequestIp()
-      send_getCountryWithRequestIp()
-      recv_getCountryWithRequestIp()
-    end
-
-    def send_getCountryWithRequestIp()
-      send_message('getCountryWithRequestIp', GetCountryWithRequestIp_args)
-    end
-
-    def recv_getCountryWithRequestIp()
-      result = receive_message(GetCountryWithRequestIp_result)
-      return
-    end
-
-    def inviteFriendsBySms(phoneNumberList)
-      send_inviteFriendsBySms(phoneNumberList)
-      recv_inviteFriendsBySms()
-    end
-
-    def send_inviteFriendsBySms(phoneNumberList)
-      send_message('inviteFriendsBySms', InviteFriendsBySms_args, :phoneNumberList => phoneNumberList)
-    end
-
-    def recv_inviteFriendsBySms()
-      result = receive_message(InviteFriendsBySms_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def findAndAddContactsByUserid(reqSeq, searchId, reference)
-      send_findAndAddContactsByUserid(reqSeq, searchId, reference)
-      return recv_findAndAddContactsByUserid()
-    end
-
-    def send_findAndAddContactsByUserid(reqSeq, searchId, reference)
-      send_message('findAndAddContactsByUserid', FindAndAddContactsByUserid_args, :reqSeq => reqSeq, :searchId => searchId, :reference => reference)
-    end
-
-    def recv_findAndAddContactsByUserid()
-      result = receive_message(FindAndAddContactsByUserid_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByUserid failed: unknown result')
-    end
-
-    def getRecommendationIds(syncReason)
-      send_getRecommendationIds(syncReason)
-      return recv_getRecommendationIds()
-    end
-
-    def send_getRecommendationIds(syncReason)
-      send_message('getRecommendationIds', GetRecommendationIds_args, :syncReason => syncReason)
-    end
-
-    def recv_getRecommendationIds()
-      result = receive_message(GetRecommendationIds_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getRecommendationIds failed: unknown result')
-    end
-
-    def updateContactSetting(reqSeq, mid, flag, value)
-      send_updateContactSetting(reqSeq, mid, flag, value)
-      recv_updateContactSetting()
-    end
-
-    def send_updateContactSetting(reqSeq, mid, flag, value)
-      send_message('updateContactSetting', UpdateContactSetting_args, :reqSeq => reqSeq, :mid => mid, :flag => flag, :value => value)
-    end
-
-    def recv_updateContactSetting()
-      result = receive_message(UpdateContactSetting_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
-      send_verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
-      return recv_verifyIdentityCredentialWithResult()
-    end
-
-    def send_verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
-      send_message('verifyIdentityCredentialWithResult', VerifyIdentityCredentialWithResult_args, :identityCredential => identityCredential, :migrationPincodeSessionId => migrationPincodeSessionId)
-    end
-
-    def recv_verifyIdentityCredentialWithResult()
-      result = receive_message(VerifyIdentityCredentialWithResult_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'verifyIdentityCredentialWithResult failed: unknown result')
-    end
-
-    def openProximityMatch(location, networkStatus)
-      send_openProximityMatch(location, networkStatus)
-      return recv_openProximityMatch()
-    end
-
-    def send_openProximityMatch(location, networkStatus)
-      send_message('openProximityMatch', OpenProximityMatch_args, :location => location, :networkStatus => networkStatus)
-    end
-
-    def recv_openProximityMatch()
-      result = receive_message(OpenProximityMatch_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'openProximityMatch failed: unknown result')
-    end
-
-    def getContacts(ids)
-      send_getContacts(ids)
-      return recv_getContacts()
-    end
-
-    def send_getContacts(ids)
-      send_message('getContacts', GetContacts_args, :ids => ids)
-    end
-
-    def recv_getContacts()
-      result = receive_message(GetContacts_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getContacts failed: unknown result')
-    end
-
-    def findAndAddContactByMetaTag(reqSeq, searchId, reference)
-      send_findAndAddContactByMetaTag(reqSeq, searchId, reference)
-      return recv_findAndAddContactByMetaTag()
-    end
-
-    def send_findAndAddContactByMetaTag(reqSeq, searchId, reference)
-      send_message('findAndAddContactByMetaTag', FindAndAddContactByMetaTag_args, :reqSeq => reqSeq, :searchId => searchId, :reference => reference)
-    end
-
-    def recv_findAndAddContactByMetaTag()
-      result = receive_message(FindAndAddContactByMetaTag_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactByMetaTag failed: unknown result')
-    end
-
-    def syncContacts(reqSeq, localContacts)
-      send_syncContacts(reqSeq, localContacts)
-      return recv_syncContacts()
-    end
-
-    def send_syncContacts(reqSeq, localContacts)
-      send_message('syncContacts', SyncContacts_args, :reqSeq => reqSeq, :localContacts => localContacts)
-    end
-
-    def recv_syncContacts()
-      result = receive_message(SyncContacts_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'syncContacts failed: unknown result')
-    end
-
-    def unblockContact(reqSeq, id, reference)
-      send_unblockContact(reqSeq, id, reference)
-      recv_unblockContact()
-    end
-
-    def send_unblockContact(reqSeq, id, reference)
-      send_message('unblockContact', UnblockContact_args, :reqSeq => reqSeq, :id => id, :reference => reference)
-    end
-
-    def recv_unblockContact()
-      result = receive_message(UnblockContact_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def getBlockedContactIds(syncReason)
-      send_getBlockedContactIds(syncReason)
-      recv_getBlockedContactIds()
-    end
-
-    def send_getBlockedContactIds(syncReason)
-      send_message('getBlockedContactIds', GetBlockedContactIds_args, :syncReason => syncReason)
-    end
-
-    def recv_getBlockedContactIds()
-      result = receive_message(GetBlockedContactIds_result)
-      return
-    end
-
-    def notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
-      send_notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
-      recv_notifyRegistrationComplete()
-    end
-
-    def send_notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
-      send_message('notifyRegistrationComplete', NotifyRegistrationComplete_args, :udidHash => udidHash, :applicationTypeWithExtensions => applicationTypeWithExtensions)
-    end
-
-    def recv_notifyRegistrationComplete()
-      result = receive_message(NotifyRegistrationComplete_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def getAllContactIds(syncReason)
-      send_getAllContactIds(syncReason)
-      return recv_getAllContactIds()
-    end
-
-    def send_getAllContactIds(syncReason)
-      send_message('getAllContactIds', GetAllContactIds_args, :syncReason => syncReason)
-    end
-
-    def recv_getAllContactIds()
-      result = receive_message(GetAllContactIds_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getAllContactIds failed: unknown result')
-    end
-
-    def acquireEncryptedAccessToken(featureType)
-      send_acquireEncryptedAccessToken(featureType)
-      return recv_acquireEncryptedAccessToken()
-    end
-
-    def send_acquireEncryptedAccessToken(featureType)
-      send_message('acquireEncryptedAccessToken', AcquireEncryptedAccessToken_args, :featureType => featureType)
-    end
-
-    def recv_acquireEncryptedAccessToken()
-      result = receive_message(AcquireEncryptedAccessToken_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'acquireEncryptedAccessToken failed: unknown result')
-    end
-
-    def verifyAccountMigration(migrationSessionId)
-      send_verifyAccountMigration(migrationSessionId)
-      recv_verifyAccountMigration()
-    end
-
-    def send_verifyAccountMigration(migrationSessionId)
-      send_message('verifyAccountMigration', VerifyAccountMigration_args, :migrationSessionId => migrationSessionId)
-    end
-
-    def recv_verifyAccountMigration()
-      result = receive_message(VerifyAccountMigration_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
-      send_notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
-      recv_notifyUpdated()
-    end
-
-    def send_notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
-      send_message('notifyUpdated', NotifyUpdated_args, :lastRev => lastRev, :deviceInfo => deviceInfo, :udidHash => udidHash, :oldUdidHash => oldUdidHash)
-    end
-
-    def recv_notifyUpdated()
-      result = receive_message(NotifyUpdated_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def leaveRoom(reqSeq, roomId)
-      send_leaveRoom(reqSeq, roomId)
-      recv_leaveRoom()
-    end
-
-    def send_leaveRoom(reqSeq, roomId)
-      send_message('leaveRoom', LeaveRoom_args, :reqSeq => reqSeq, :roomId => roomId)
-    end
-
-    def recv_leaveRoom()
-      result = receive_message(LeaveRoom_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def createAccountMigrationPincodeSession()
-      send_createAccountMigrationPincodeSession()
-      return recv_createAccountMigrationPincodeSession()
-    end
-
-    def send_createAccountMigrationPincodeSession()
-      send_message('createAccountMigrationPincodeSession', CreateAccountMigrationPincodeSession_args)
-    end
-
-    def recv_createAccountMigrationPincodeSession()
-      result = receive_message(CreateAccountMigrationPincodeSession_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'createAccountMigrationPincodeSession failed: unknown result')
-    end
-
-    def noop()
-      send_noop()
-      recv_noop()
-    end
-
-    def send_noop()
-      send_message('noop', Noop_args)
-    end
-
-    def recv_noop()
-      result = receive_message(Noop_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def unregisterUserAndDevice()
-      send_unregisterUserAndDevice()
-      return recv_unregisterUserAndDevice()
-    end
-
-    def send_unregisterUserAndDevice()
-      send_message('unregisterUserAndDevice', UnregisterUserAndDevice_args)
-    end
-
-    def recv_unregisterUserAndDevice()
-      result = receive_message(UnregisterUserAndDevice_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'unregisterUserAndDevice failed: unknown result')
-    end
-
-    def blockContact(reqSeq, id)
-      send_blockContact(reqSeq, id)
-      recv_blockContact()
-    end
-
-    def send_blockContact(reqSeq, id)
-      send_message('blockContact', BlockContact_args, :reqSeq => reqSeq, :id => id)
-    end
-
-    def recv_blockContact()
-      result = receive_message(BlockContact_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def notifyInstalled(udidHash, applicationTypeWithExtensions)
-      send_notifyInstalled(udidHash, applicationTypeWithExtensions)
-      recv_notifyInstalled()
-    end
-
-    def send_notifyInstalled(udidHash, applicationTypeWithExtensions)
-      send_message('notifyInstalled', NotifyInstalled_args, :udidHash => udidHash, :applicationTypeWithExtensions => applicationTypeWithExtensions)
-    end
-
-    def recv_notifyInstalled()
-      result = receive_message(NotifyInstalled_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def unblockRecommendation(reqSeq, id)
-      send_unblockRecommendation(reqSeq, id)
-      recv_unblockRecommendation()
-    end
-
-    def send_unblockRecommendation(reqSeq, id)
-      send_message('unblockRecommendation', UnblockRecommendation_args, :reqSeq => reqSeq, :id => id)
-    end
-
-    def recv_unblockRecommendation()
-      result = receive_message(UnblockRecommendation_result)
-      raise result.e unless result.e.nil?
-      return
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByPhone failed: unknown result')
     end
 
     def registerE2EEPublicKey(reqSeq, publicKey)
@@ -971,78 +450,32 @@ module TalkService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getContact failed: unknown result')
     end
 
-    def blockRecommendation(reqSeq, id)
-      send_blockRecommendation(reqSeq, id)
-      recv_blockRecommendation()
+    def respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
+      send_respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
+      recv_respondE2EEKeyExchange()
     end
 
-    def send_blockRecommendation(reqSeq, id)
-      send_message('blockRecommendation', BlockRecommendation_args, :reqSeq => reqSeq, :id => id)
+    def send_respondE2EEKeyExchange(reqSeq, encryptedKeyChain, hashKeyChain)
+      send_message('respondE2EEKeyExchange', RespondE2EEKeyExchange_args, :reqSeq => reqSeq, :encryptedKeyChain => encryptedKeyChain, :hashKeyChain => hashKeyChain)
     end
 
-    def recv_blockRecommendation()
-      result = receive_message(BlockRecommendation_result)
+    def recv_respondE2EEKeyExchange()
+      result = receive_message(RespondE2EEKeyExchange_result)
       raise result.e unless result.e.nil?
       return
     end
 
-    def acceptProximityMatches(sessionId, ids)
-      send_acceptProximityMatches(sessionId, ids)
-      recv_acceptProximityMatches()
+    def notifySleep(lastRev, badge)
+      send_notifySleep(lastRev, badge)
+      recv_notifySleep()
     end
 
-    def send_acceptProximityMatches(sessionId, ids)
-      send_message('acceptProximityMatches', AcceptProximityMatches_args, :sessionId => sessionId, :ids => ids)
+    def send_notifySleep(lastRev, badge)
+      send_message('notifySleep', NotifySleep_args, :lastRev => lastRev, :badge => badge)
     end
 
-    def recv_acceptProximityMatches()
-      result = receive_message(AcceptProximityMatches_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def findAndAddContactsByPhone(reqSeq, phones, reference)
-      send_findAndAddContactsByPhone(reqSeq, phones, reference)
-      return recv_findAndAddContactsByPhone()
-    end
-
-    def send_findAndAddContactsByPhone(reqSeq, phones, reference)
-      send_message('findAndAddContactsByPhone', FindAndAddContactsByPhone_args, :reqSeq => reqSeq, :phones => phones, :reference => reference)
-    end
-
-    def recv_findAndAddContactsByPhone()
-      result = receive_message(FindAndAddContactsByPhone_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByPhone failed: unknown result')
-    end
-
-    def closeProximityMatch(sessionId)
-      send_closeProximityMatch(sessionId)
-      recv_closeProximityMatch()
-    end
-
-    def send_closeProximityMatch(sessionId)
-      send_message('closeProximityMatch', CloseProximityMatch_args, :sessionId => sessionId)
-    end
-
-    def recv_closeProximityMatch()
-      result = receive_message(CloseProximityMatch_result)
-      raise result.e unless result.e.nil?
-      return
-    end
-
-    def registerUserid(reqSeq, searchId)
-      send_registerUserid(reqSeq, searchId)
-      recv_registerUserid()
-    end
-
-    def send_registerUserid(reqSeq, searchId)
-      send_message('registerUserid', RegisterUserid_args, :reqSeq => reqSeq, :searchId => searchId)
-    end
-
-    def recv_registerUserid()
-      result = receive_message(RegisterUserid_result)
+    def recv_notifySleep()
+      result = receive_message(NotifySleep_result)
       raise result.e unless result.e.nil?
       return
     end
@@ -1063,40 +496,501 @@ module TalkService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getAnalyticsInfo failed: unknown result')
     end
 
-    def getEncryptedIdentityV3()
-      send_getEncryptedIdentityV3()
-      return recv_getEncryptedIdentityV3()
+    def sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
+      send_sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
+      recv_sendChatRemoved()
     end
 
-    def send_getEncryptedIdentityV3()
-      send_message('getEncryptedIdentityV3', GetEncryptedIdentityV3_args)
+    def send_sendChatRemoved(seq, chatMid, lastMessageId, sessionId)
+      send_message('sendChatRemoved', SendChatRemoved_args, :seq => seq, :chatMid => chatMid, :lastMessageId => lastMessageId, :sessionId => sessionId)
     end
 
-    def recv_getEncryptedIdentityV3()
-      result = receive_message(GetEncryptedIdentityV3_result)
+    def recv_sendChatRemoved()
+      result = receive_message(SendChatRemoved_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def blockContact(reqSeq, id)
+      send_blockContact(reqSeq, id)
+      recv_blockContact()
+    end
+
+    def send_blockContact(reqSeq, id)
+      send_message('blockContact', BlockContact_args, :reqSeq => reqSeq, :id => id)
+    end
+
+    def recv_blockContact()
+      result = receive_message(BlockContact_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def removeAllMessages(seq, lastMessageId)
+      send_removeAllMessages(seq, lastMessageId)
+      recv_removeAllMessages()
+    end
+
+    def send_removeAllMessages(seq, lastMessageId)
+      send_message('removeAllMessages', RemoveAllMessages_args, :seq => seq, :lastMessageId => lastMessageId)
+    end
+
+    def recv_removeAllMessages()
+      result = receive_message(RemoveAllMessages_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def negotiateE2EEPublicKey(mid)
+      send_negotiateE2EEPublicKey(mid)
+      return recv_negotiateE2EEPublicKey()
+    end
+
+    def send_negotiateE2EEPublicKey(mid)
+      send_message('negotiateE2EEPublicKey', NegotiateE2EEPublicKey_args, :mid => mid)
+    end
+
+    def recv_negotiateE2EEPublicKey()
+      result = receive_message(NegotiateE2EEPublicKey_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getEncryptedIdentityV3 failed: unknown result')
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'negotiateE2EEPublicKey failed: unknown result')
     end
 
-    def notifySleep(lastRev, badge)
-      send_notifySleep(lastRev, badge)
-      recv_notifySleep()
+    def openProximityMatch(location, networkStatus)
+      send_openProximityMatch(location, networkStatus)
+      return recv_openProximityMatch()
     end
 
-    def send_notifySleep(lastRev, badge)
-      send_message('notifySleep', NotifySleep_args, :lastRev => lastRev, :badge => badge)
+    def send_openProximityMatch(location, networkStatus)
+      send_message('openProximityMatch', OpenProximityMatch_args, :location => location, :networkStatus => networkStatus)
     end
 
-    def recv_notifySleep()
-      result = receive_message(NotifySleep_result)
+    def recv_openProximityMatch()
+      result = receive_message(OpenProximityMatch_result)
+      return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'openProximityMatch failed: unknown result')
+    end
+
+    def findAndAddContactByMetaTag(reqSeq, searchId, reference)
+      send_findAndAddContactByMetaTag(reqSeq, searchId, reference)
+      return recv_findAndAddContactByMetaTag()
+    end
+
+    def send_findAndAddContactByMetaTag(reqSeq, searchId, reference)
+      send_message('findAndAddContactByMetaTag', FindAndAddContactByMetaTag_args, :reqSeq => reqSeq, :searchId => searchId, :reference => reference)
+    end
+
+    def recv_findAndAddContactByMetaTag()
+      result = receive_message(FindAndAddContactByMetaTag_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactByMetaTag failed: unknown result')
+    end
+
+    def findAndAddContactsByMid(reqSeq, mid, type, reference)
+      send_findAndAddContactsByMid(reqSeq, mid, type, reference)
+      return recv_findAndAddContactsByMid()
+    end
+
+    def send_findAndAddContactsByMid(reqSeq, mid, type, reference)
+      send_message('findAndAddContactsByMid', FindAndAddContactsByMid_args, :reqSeq => reqSeq, :mid => mid, :type => type, :reference => reference)
+    end
+
+    def recv_findAndAddContactsByMid()
+      result = receive_message(FindAndAddContactsByMid_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByMid failed: unknown result')
+    end
+
+    def updateAccountMigrationPincode(accountMigrationPincode)
+      send_updateAccountMigrationPincode(accountMigrationPincode)
+      recv_updateAccountMigrationPincode()
+    end
+
+    def send_updateAccountMigrationPincode(accountMigrationPincode)
+      send_message('updateAccountMigrationPincode', UpdateAccountMigrationPincode_args, :accountMigrationPincode => accountMigrationPincode)
+    end
+
+    def recv_updateAccountMigrationPincode()
+      result = receive_message(UpdateAccountMigrationPincode_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def sendMessage(seq, message)
+      send_sendMessage(seq, message)
+      return recv_sendMessage()
+    end
+
+    def send_sendMessage(seq, message)
+      send_message('sendMessage', SendMessage_args, :seq => seq, :message => message)
+    end
+
+    def recv_sendMessage()
+      result = receive_message(SendMessage_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'sendMessage failed: unknown result')
+    end
+
+    def updateContactSetting(reqSeq, mid, flag, value)
+      send_updateContactSetting(reqSeq, mid, flag, value)
+      recv_updateContactSetting()
+    end
+
+    def send_updateContactSetting(reqSeq, mid, flag, value)
+      send_message('updateContactSetting', UpdateContactSetting_args, :reqSeq => reqSeq, :mid => mid, :flag => flag, :value => value)
+    end
+
+    def recv_updateContactSetting()
+      result = receive_message(UpdateContactSetting_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def findAndAddContactsByUserid(reqSeq, searchId, reference)
+      send_findAndAddContactsByUserid(reqSeq, searchId, reference)
+      return recv_findAndAddContactsByUserid()
+    end
+
+    def send_findAndAddContactsByUserid(reqSeq, searchId, reference)
+      send_message('findAndAddContactsByUserid', FindAndAddContactsByUserid_args, :reqSeq => reqSeq, :searchId => searchId, :reference => reference)
+    end
+
+    def recv_findAndAddContactsByUserid()
+      result = receive_message(FindAndAddContactsByUserid_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findAndAddContactsByUserid failed: unknown result')
+    end
+
+    def getCountryWithRequestIp()
+      send_getCountryWithRequestIp()
+      return recv_getCountryWithRequestIp()
+    end
+
+    def send_getCountryWithRequestIp()
+      send_message('getCountryWithRequestIp', GetCountryWithRequestIp_args)
+    end
+
+    def recv_getCountryWithRequestIp()
+      result = receive_message(GetCountryWithRequestIp_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getCountryWithRequestIp failed: unknown result')
+    end
+
+    def inviteIntoRoom(reqSeq, roomId, contactIds)
+      send_inviteIntoRoom(reqSeq, roomId, contactIds)
+      recv_inviteIntoRoom()
+    end
+
+    def send_inviteIntoRoom(reqSeq, roomId, contactIds)
+      send_message('inviteIntoRoom', InviteIntoRoom_args, :reqSeq => reqSeq, :roomId => roomId, :contactIds => contactIds)
+    end
+
+    def recv_inviteIntoRoom()
+      result = receive_message(InviteIntoRoom_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def inviteFriendsBySms(phoneNumberList)
+      send_inviteFriendsBySms(phoneNumberList)
+      recv_inviteFriendsBySms()
+    end
+
+    def send_inviteFriendsBySms(phoneNumberList)
+      send_message('inviteFriendsBySms', InviteFriendsBySms_args, :phoneNumberList => phoneNumberList)
+    end
+
+    def recv_inviteFriendsBySms()
+      result = receive_message(InviteFriendsBySms_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def getContacts(ids)
+      send_getContacts(ids)
+      return recv_getContacts()
+    end
+
+    def send_getContacts(ids)
+      send_message('getContacts', GetContacts_args, :ids => ids)
+    end
+
+    def recv_getContacts()
+      result = receive_message(GetContacts_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getContacts failed: unknown result')
+    end
+
+    def syncContacts(reqSeq, localContacts)
+      send_syncContacts(reqSeq, localContacts)
+      return recv_syncContacts()
+    end
+
+    def send_syncContacts(reqSeq, localContacts)
+      send_message('syncContacts', SyncContacts_args, :reqSeq => reqSeq, :localContacts => localContacts)
+    end
+
+    def recv_syncContacts()
+      result = receive_message(SyncContacts_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'syncContacts failed: unknown result')
+    end
+
+    def verifyAccountMigration(migrationSessionId)
+      send_verifyAccountMigration(migrationSessionId)
+      recv_verifyAccountMigration()
+    end
+
+    def send_verifyAccountMigration(migrationSessionId)
+      send_message('verifyAccountMigration', VerifyAccountMigration_args, :migrationSessionId => migrationSessionId)
+    end
+
+    def recv_verifyAccountMigration()
+      result = receive_message(VerifyAccountMigration_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
+      send_verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
+      return recv_verifyIdentityCredentialWithResult()
+    end
+
+    def send_verifyIdentityCredentialWithResult(identityCredential, migrationPincodeSessionId)
+      send_message('verifyIdentityCredentialWithResult', VerifyIdentityCredentialWithResult_args, :identityCredential => identityCredential, :migrationPincodeSessionId => migrationPincodeSessionId)
+    end
+
+    def recv_verifyIdentityCredentialWithResult()
+      result = receive_message(VerifyIdentityCredentialWithResult_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'verifyIdentityCredentialWithResult failed: unknown result')
+    end
+
+    def leaveRoom(reqSeq, roomId)
+      send_leaveRoom(reqSeq, roomId)
+      recv_leaveRoom()
+    end
+
+    def send_leaveRoom(reqSeq, roomId)
+      send_message('leaveRoom', LeaveRoom_args, :reqSeq => reqSeq, :roomId => roomId)
+    end
+
+    def recv_leaveRoom()
+      result = receive_message(LeaveRoom_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def createAccountMigrationPincodeSession()
+      send_createAccountMigrationPincodeSession()
+      return recv_createAccountMigrationPincodeSession()
+    end
+
+    def send_createAccountMigrationPincodeSession()
+      send_message('createAccountMigrationPincodeSession', CreateAccountMigrationPincodeSession_args)
+    end
+
+    def recv_createAccountMigrationPincodeSession()
+      result = receive_message(CreateAccountMigrationPincodeSession_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'createAccountMigrationPincodeSession failed: unknown result')
+    end
+
+    def notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
+      send_notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
+      recv_notifyRegistrationComplete()
+    end
+
+    def send_notifyRegistrationComplete(udidHash, applicationTypeWithExtensions)
+      send_message('notifyRegistrationComplete', NotifyRegistrationComplete_args, :udidHash => udidHash, :applicationTypeWithExtensions => applicationTypeWithExtensions)
+    end
+
+    def recv_notifyRegistrationComplete()
+      result = receive_message(NotifyRegistrationComplete_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def unblockContact(reqSeq, id, reference)
+      send_unblockContact(reqSeq, id, reference)
+      recv_unblockContact()
+    end
+
+    def send_unblockContact(reqSeq, id, reference)
+      send_message('unblockContact', UnblockContact_args, :reqSeq => reqSeq, :id => id, :reference => reference)
+    end
+
+    def recv_unblockContact()
+      result = receive_message(UnblockContact_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def noop()
+      send_noop()
+      recv_noop()
+    end
+
+    def send_noop()
+      send_message('noop', Noop_args)
+    end
+
+    def recv_noop()
+      result = receive_message(Noop_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def blockRecommendation(reqSeq, id)
+      send_blockRecommendation(reqSeq, id)
+      recv_blockRecommendation()
+    end
+
+    def send_blockRecommendation(reqSeq, id)
+      send_message('blockRecommendation', BlockRecommendation_args, :reqSeq => reqSeq, :id => id)
+    end
+
+    def recv_blockRecommendation()
+      result = receive_message(BlockRecommendation_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def unregisterUserAndDevice()
+      send_unregisterUserAndDevice()
+      return recv_unregisterUserAndDevice()
+    end
+
+    def send_unregisterUserAndDevice()
+      send_message('unregisterUserAndDevice', UnregisterUserAndDevice_args)
+    end
+
+    def recv_unregisterUserAndDevice()
+      result = receive_message(UnregisterUserAndDevice_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'unregisterUserAndDevice failed: unknown result')
+    end
+
+    def notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
+      send_notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
+      recv_notifyUpdated()
+    end
+
+    def send_notifyUpdated(lastRev, deviceInfo, udidHash, oldUdidHash)
+      send_message('notifyUpdated', NotifyUpdated_args, :lastRev => lastRev, :deviceInfo => deviceInfo, :udidHash => udidHash, :oldUdidHash => oldUdidHash)
+    end
+
+    def recv_notifyUpdated()
+      result = receive_message(NotifyUpdated_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def acquireEncryptedAccessToken(featureType)
+      send_acquireEncryptedAccessToken(featureType)
+      return recv_acquireEncryptedAccessToken()
+    end
+
+    def send_acquireEncryptedAccessToken(featureType)
+      send_message('acquireEncryptedAccessToken', AcquireEncryptedAccessToken_args, :featureType => featureType)
+    end
+
+    def recv_acquireEncryptedAccessToken()
+      result = receive_message(AcquireEncryptedAccessToken_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'acquireEncryptedAccessToken failed: unknown result')
+    end
+
+    def acceptProximityMatches(sessionId, ids)
+      send_acceptProximityMatches(sessionId, ids)
+      recv_acceptProximityMatches()
+    end
+
+    def send_acceptProximityMatches(sessionId, ids)
+      send_message('acceptProximityMatches', AcceptProximityMatches_args, :sessionId => sessionId, :ids => ids)
+    end
+
+    def recv_acceptProximityMatches()
+      result = receive_message(AcceptProximityMatches_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def closeProximityMatch(sessionId)
+      send_closeProximityMatch(sessionId)
+      recv_closeProximityMatch()
+    end
+
+    def send_closeProximityMatch(sessionId)
+      send_message('closeProximityMatch', CloseProximityMatch_args, :sessionId => sessionId)
+    end
+
+    def recv_closeProximityMatch()
+      result = receive_message(CloseProximityMatch_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def unblockRecommendation(reqSeq, id)
+      send_unblockRecommendation(reqSeq, id)
+      recv_unblockRecommendation()
+    end
+
+    def send_unblockRecommendation(reqSeq, id)
+      send_message('unblockRecommendation', UnblockRecommendation_args, :reqSeq => reqSeq, :id => id)
+    end
+
+    def recv_unblockRecommendation()
+      result = receive_message(UnblockRecommendation_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def registerUserid(reqSeq, searchId)
+      send_registerUserid(reqSeq, searchId)
+      recv_registerUserid()
+    end
+
+    def send_registerUserid(reqSeq, searchId)
+      send_message('registerUserid', RegisterUserid_args, :reqSeq => reqSeq, :searchId => searchId)
+    end
+
+    def recv_registerUserid()
+      result = receive_message(RegisterUserid_result)
+      raise result.e unless result.e.nil?
+      return
+    end
+
+    def notifyInstalled(udidHash, applicationTypeWithExtensions)
+      send_notifyInstalled(udidHash, applicationTypeWithExtensions)
+      recv_notifyInstalled()
+    end
+
+    def send_notifyInstalled(udidHash, applicationTypeWithExtensions)
+      send_message('notifyInstalled', NotifyInstalled_args, :udidHash => udidHash, :applicationTypeWithExtensions => applicationTypeWithExtensions)
+    end
+
+    def recv_notifyInstalled()
+      result = receive_message(NotifyInstalled_result)
       return
     end
 
     def acceptChatInvitation(request)
       send_acceptChatInvitation(request)
-      recv_acceptChatInvitation()
+      return recv_acceptChatInvitation()
     end
 
     def send_acceptChatInvitation(request)
@@ -1105,23 +999,9 @@ module TalkService
 
     def recv_acceptChatInvitation()
       result = receive_message(AcceptChatInvitation_result)
-      return
-    end
-
-    def getMessageBoxes(messageBoxListRequest, syncReason)
-      send_getMessageBoxes(messageBoxListRequest, syncReason)
-      return recv_getMessageBoxes()
-    end
-
-    def send_getMessageBoxes(messageBoxListRequest, syncReason)
-      send_message('getMessageBoxes', GetMessageBoxes_args, :messageBoxListRequest => messageBoxListRequest, :syncReason => syncReason)
-    end
-
-    def recv_getMessageBoxes()
-      result = receive_message(GetMessageBoxes_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getMessageBoxes failed: unknown result')
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'acceptChatInvitation failed: unknown result')
     end
 
     def acceptChatInvitationByTicket(request)
@@ -1138,22 +1018,6 @@ module TalkService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'acceptChatInvitationByTicket failed: unknown result')
-    end
-
-    def getProfile(syncReason)
-      send_getProfile(syncReason)
-      return recv_getProfile()
-    end
-
-    def send_getProfile(syncReason)
-      send_message('getProfile', GetProfile_args, :syncReason => syncReason)
-    end
-
-    def recv_getProfile()
-      result = receive_message(GetProfile_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getProfile failed: unknown result')
     end
 
     def cancelChatInvitation(request)
@@ -1188,6 +1052,22 @@ module TalkService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'createChat failed: unknown result')
     end
 
+    def getExtendedProfile(syncReason)
+      send_getExtendedProfile(syncReason)
+      return recv_getExtendedProfile()
+    end
+
+    def send_getExtendedProfile(syncReason)
+      send_message('getExtendedProfile', GetExtendedProfile_args, :syncReason => syncReason)
+    end
+
+    def recv_getExtendedProfile()
+      result = receive_message(GetExtendedProfile_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getExtendedProfile failed: unknown result')
+    end
+
     def deleteOtherFromChat(request)
       send_deleteOtherFromChat(request)
       return recv_deleteOtherFromChat()
@@ -1202,6 +1082,22 @@ module TalkService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'deleteOtherFromChat failed: unknown result')
+    end
+
+    def getMessageBoxes(messageBoxListRequest, syncReason)
+      send_getMessageBoxes(messageBoxListRequest, syncReason)
+      return recv_getMessageBoxes()
+    end
+
+    def send_getMessageBoxes(messageBoxListRequest, syncReason)
+      send_message('getMessageBoxes', GetMessageBoxes_args, :messageBoxListRequest => messageBoxListRequest, :syncReason => syncReason)
+    end
+
+    def recv_getMessageBoxes()
+      result = receive_message(GetMessageBoxes_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getMessageBoxes failed: unknown result')
     end
 
     def deleteSelfFromChat(request)
@@ -1220,25 +1116,25 @@ module TalkService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'deleteSelfFromChat failed: unknown result')
     end
 
-    def getSettings(syncReason)
-      send_getSettings(syncReason)
-      return recv_getSettings()
+    def getProfile(syncReason)
+      send_getProfile(syncReason)
+      return recv_getProfile()
     end
 
-    def send_getSettings(syncReason)
-      send_message('getSettings', GetSettings_args, :syncReason => syncReason)
+    def send_getProfile(syncReason)
+      send_message('getProfile', GetProfile_args, :syncReason => syncReason)
     end
 
-    def recv_getSettings()
-      result = receive_message(GetSettings_result)
+    def recv_getProfile()
+      result = receive_message(GetProfile_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSettings failed: unknown result')
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getProfile failed: unknown result')
     end
 
     def findChatByTicket(request)
       send_findChatByTicket(request)
-      recv_findChatByTicket()
+      return recv_findChatByTicket()
     end
 
     def send_findChatByTicket(request)
@@ -1247,23 +1143,25 @@ module TalkService
 
     def recv_findChatByTicket()
       result = receive_message(FindChatByTicket_result)
-      return
-    end
-
-    def getSettingsAttributes2(attributesToRetrieve)
-      send_getSettingsAttributes2(attributesToRetrieve)
-      return recv_getSettingsAttributes2()
-    end
-
-    def send_getSettingsAttributes2(attributesToRetrieve)
-      send_message('getSettingsAttributes2', GetSettingsAttributes2_args, :attributesToRetrieve => attributesToRetrieve)
-    end
-
-    def recv_getSettingsAttributes2()
-      result = receive_message(GetSettingsAttributes2_result)
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSettingsAttributes2 failed: unknown result')
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'findChatByTicket failed: unknown result')
+    end
+
+    def getRecommendationIds(syncReason)
+      send_getRecommendationIds(syncReason)
+      return recv_getRecommendationIds()
+    end
+
+    def send_getRecommendationIds(syncReason)
+      send_message('getRecommendationIds', GetRecommendationIds_args, :syncReason => syncReason)
+    end
+
+    def recv_getRecommendationIds()
+      result = receive_message(GetRecommendationIds_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getRecommendationIds failed: unknown result')
     end
 
     def getAllChatMids(request, syncReason)
@@ -1282,6 +1180,102 @@ module TalkService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getAllChatMids failed: unknown result')
     end
 
+    def getAllContactIds(syncReason)
+      send_getAllContactIds(syncReason)
+      return recv_getAllContactIds()
+    end
+
+    def send_getAllContactIds(syncReason)
+      send_message('getAllContactIds', GetAllContactIds_args, :syncReason => syncReason)
+    end
+
+    def recv_getAllContactIds()
+      result = receive_message(GetAllContactIds_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getAllContactIds failed: unknown result')
+    end
+
+    def getBlockedContactIds(syncReason)
+      send_getBlockedContactIds(syncReason)
+      return recv_getBlockedContactIds()
+    end
+
+    def send_getBlockedContactIds(syncReason)
+      send_message('getBlockedContactIds', GetBlockedContactIds_args, :syncReason => syncReason)
+    end
+
+    def recv_getBlockedContactIds()
+      result = receive_message(GetBlockedContactIds_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getBlockedContactIds failed: unknown result')
+    end
+
+    def getBlockedRecommendationIds(syncReason)
+      send_getBlockedRecommendationIds(syncReason)
+      return recv_getBlockedRecommendationIds()
+    end
+
+    def send_getBlockedRecommendationIds(syncReason)
+      send_message('getBlockedRecommendationIds', GetBlockedRecommendationIds_args, :syncReason => syncReason)
+    end
+
+    def recv_getBlockedRecommendationIds()
+      result = receive_message(GetBlockedRecommendationIds_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getBlockedRecommendationIds failed: unknown result')
+    end
+
+    def getSettings(syncReason)
+      send_getSettings(syncReason)
+      return recv_getSettings()
+    end
+
+    def send_getSettings(syncReason)
+      send_message('getSettings', GetSettings_args, :syncReason => syncReason)
+    end
+
+    def recv_getSettings()
+      result = receive_message(GetSettings_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSettings failed: unknown result')
+    end
+
+    def getSettingsAttributes2(attributesToRetrieve)
+      send_getSettingsAttributes2(attributesToRetrieve)
+      return recv_getSettingsAttributes2()
+    end
+
+    def send_getSettingsAttributes2(attributesToRetrieve)
+      send_message('getSettingsAttributes2', GetSettingsAttributes2_args, :attributesToRetrieve => attributesToRetrieve)
+    end
+
+    def recv_getSettingsAttributes2()
+      result = receive_message(GetSettingsAttributes2_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getSettingsAttributes2 failed: unknown result')
+    end
+
+    def getChatEffectMetaList(categories)
+      send_getChatEffectMetaList(categories)
+      return recv_getChatEffectMetaList()
+    end
+
+    def send_getChatEffectMetaList(categories)
+      send_message('getChatEffectMetaList', GetChatEffectMetaList_args, :categories => categories)
+    end
+
+    def recv_getChatEffectMetaList()
+      result = receive_message(GetChatEffectMetaList_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getChatEffectMetaList failed: unknown result')
+    end
+
     def inviteIntoChat(request)
       send_inviteIntoChat(request)
       return recv_inviteIntoChat()
@@ -1296,6 +1290,37 @@ module TalkService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'inviteIntoChat failed: unknown result')
+    end
+
+    def getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
+      send_getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
+      return recv_getChatRoomAnnouncementsBulk()
+    end
+
+    def send_getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
+      send_message('getChatRoomAnnouncementsBulk', GetChatRoomAnnouncementsBulk_args, :chatRoomMids => chatRoomMids, :syncReason => syncReason)
+    end
+
+    def recv_getChatRoomAnnouncementsBulk()
+      result = receive_message(GetChatRoomAnnouncementsBulk_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getChatRoomAnnouncementsBulk failed: unknown result')
+    end
+
+    def generateUserTicket(expirationTime, maxUseCount)
+      send_generateUserTicket(expirationTime, maxUseCount)
+      recv_generateUserTicket()
+    end
+
+    def send_generateUserTicket(expirationTime, maxUseCount)
+      send_message('generateUserTicket', GenerateUserTicket_args, :expirationTime => expirationTime, :maxUseCount => maxUseCount)
+    end
+
+    def recv_generateUserTicket()
+      result = receive_message(GenerateUserTicket_result)
+      raise result.e unless result.e.nil?
+      return
     end
 
     def reissueChatTicket(request)
@@ -1316,7 +1341,7 @@ module TalkService
 
     def rejectChatInvitation(request)
       send_rejectChatInvitation(request)
-      return recv_rejectChatInvitation()
+      recv_rejectChatInvitation()
     end
 
     def send_rejectChatInvitation(request)
@@ -1325,25 +1350,7 @@ module TalkService
 
     def recv_rejectChatInvitation()
       result = receive_message(RejectChatInvitation_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'rejectChatInvitation failed: unknown result')
-    end
-
-    def getChatEffectMetaList(categories)
-      send_getChatEffectMetaList(categories)
-      return recv_getChatEffectMetaList()
-    end
-
-    def send_getChatEffectMetaList(categories)
-      send_message('getChatEffectMetaList', GetChatEffectMetaList_args, :categories => categories)
-    end
-
-    def recv_getChatEffectMetaList()
-      result = receive_message(GetChatEffectMetaList_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getChatEffectMetaList failed: unknown result')
+      return
     end
 
     def setNotificationsEnabled(reqSeq, type, target, enablement)
@@ -1359,22 +1366,6 @@ module TalkService
       result = receive_message(SetNotificationsEnabled_result)
       raise result.e unless result.e.nil?
       return
-    end
-
-    def getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
-      send_getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
-      return recv_getChatRoomAnnouncementsBulk()
-    end
-
-    def send_getChatRoomAnnouncementsBulk(chatRoomMids, syncReason)
-      send_message('getChatRoomAnnouncementsBulk', GetChatRoomAnnouncementsBulk_args, :chatRoomMids => chatRoomMids, :syncReason => syncReason)
-    end
-
-    def recv_getChatRoomAnnouncementsBulk()
-      result = receive_message(GetChatRoomAnnouncementsBulk_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getChatRoomAnnouncementsBulk failed: unknown result')
     end
 
     def updateChat(request)
@@ -1407,22 +1398,6 @@ module TalkService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'updateSettingsAttributes2 failed: unknown result')
-    end
-
-    def getExtendedProfile(syncReason)
-      send_getExtendedProfile(syncReason)
-      return recv_getExtendedProfile()
-    end
-
-    def send_getExtendedProfile(syncReason)
-      send_message('getExtendedProfile', GetExtendedProfile_args, :syncReason => syncReason)
-    end
-
-    def recv_getExtendedProfile()
-      result = receive_message(GetExtendedProfile_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getExtendedProfile failed: unknown result')
     end
 
     def getChats(request)
@@ -1475,7 +1450,7 @@ module TalkService
 
     def getRoomsV2(roomIds)
       send_getRoomsV2(roomIds)
-      return recv_getRoomsV2()
+      recv_getRoomsV2()
     end
 
     def send_getRoomsV2(roomIds)
@@ -1484,9 +1459,7 @@ module TalkService
 
     def recv_getRoomsV2()
       result = receive_message(GetRoomsV2_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getRoomsV2 failed: unknown result')
+      return
     end
 
   end
@@ -1549,39 +1522,6 @@ module TalkService
       write_result(result, oprot, 'sendPostback', seqid)
     end
 
-    def process_getLastOpRevision(seqid, iprot, oprot)
-      args = read_args(iprot, GetLastOpRevision_args)
-      result = GetLastOpRevision_result.new()
-      begin
-        result.success = @handler.getLastOpRevision()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getLastOpRevision', seqid)
-    end
-
-    def process_fetchOperations(seqid, iprot, oprot)
-      args = read_args(iprot, FetchOperations_args)
-      result = FetchOperations_result.new()
-      begin
-        result.success = @handler.fetchOperations(args.localRev, args.count)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'fetchOperations', seqid)
-    end
-
-    def process_fetchOps(seqid, iprot, oprot)
-      args = read_args(iprot, FetchOps_args)
-      result = FetchOps_result.new()
-      begin
-        result.success = @handler.fetchOps(args.localRev, args.count, args.globalRev, args.individualRev)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'fetchOps', seqid)
-    end
-
     def process_reportDeviceState(seqid, iprot, oprot)
       args = read_args(iprot, ReportDeviceState_args)
       result = ReportDeviceState_result.new()
@@ -1629,7 +1569,11 @@ module TalkService
     def process_updateExtendedProfileAttribute(seqid, iprot, oprot)
       args = read_args(iprot, UpdateExtendedProfileAttribute_args)
       result = UpdateExtendedProfileAttribute_result.new()
-      @handler.updateExtendedProfileAttribute(args.reqSeq, args.attr, args.extendedProfile)
+      begin
+        @handler.updateExtendedProfileAttribute(args.reqSeq, args.attr, args.extendedProfile)
+      rescue ::TalkException => e
+        result.e = e
+      end
       write_result(result, oprot, 'updateExtendedProfileAttribute', seqid)
     end
 
@@ -1658,7 +1602,11 @@ module TalkService
     def process_createChatRoomAnnouncement(seqid, iprot, oprot)
       args = read_args(iprot, CreateChatRoomAnnouncement_args)
       result = CreateChatRoomAnnouncement_result.new()
-      @handler.createChatRoomAnnouncement(args.reqSeq, args.chatRoomMid, args.type, args.contents)
+      begin
+        result.success = @handler.createChatRoomAnnouncement(args.reqSeq, args.chatRoomMid, args.type, args.contents)
+      rescue ::TalkException => e
+        result.e = e
+      end
       write_result(result, oprot, 'createChatRoomAnnouncement', seqid)
     end
 
@@ -1783,359 +1731,26 @@ module TalkService
       write_result(result, oprot, 'updateProfileAttributes', seqid)
     end
 
-    def process_respondE2EEKeyExchange(seqid, iprot, oprot)
-      args = read_args(iprot, RespondE2EEKeyExchange_args)
-      result = RespondE2EEKeyExchange_result.new()
+    def process_getEncryptedIdentityV3(seqid, iprot, oprot)
+      args = read_args(iprot, GetEncryptedIdentityV3_args)
+      result = GetEncryptedIdentityV3_result.new()
       begin
-        @handler.respondE2EEKeyExchange(args.reqSeq, args.encryptedKeyChain, args.hashKeyChain)
+        result.success = @handler.getEncryptedIdentityV3()
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'respondE2EEKeyExchange', seqid)
+      write_result(result, oprot, 'getEncryptedIdentityV3', seqid)
     end
 
-    def process_getBlockedRecommendationIds(seqid, iprot, oprot)
-      args = read_args(iprot, GetBlockedRecommendationIds_args)
-      result = GetBlockedRecommendationIds_result.new()
+    def process_findAndAddContactsByPhone(seqid, iprot, oprot)
+      args = read_args(iprot, FindAndAddContactsByPhone_args)
+      result = FindAndAddContactsByPhone_result.new()
       begin
-        result.success = @handler.getBlockedRecommendationIds(args.syncReason)
+        result.success = @handler.findAndAddContactsByPhone(args.reqSeq, args.phones, args.reference)
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'getBlockedRecommendationIds', seqid)
-    end
-
-    def process_negotiateE2EEPublicKey(seqid, iprot, oprot)
-      args = read_args(iprot, NegotiateE2EEPublicKey_args)
-      result = NegotiateE2EEPublicKey_result.new()
-      begin
-        result.success = @handler.negotiateE2EEPublicKey(args.mid)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'negotiateE2EEPublicKey', seqid)
-    end
-
-    def process_sendMessage(seqid, iprot, oprot)
-      args = read_args(iprot, SendMessage_args)
-      result = SendMessage_result.new()
-      begin
-        result.success = @handler.sendMessage(args.seq, args.message)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'sendMessage', seqid)
-    end
-
-    def process_sendChatRemoved(seqid, iprot, oprot)
-      args = read_args(iprot, SendChatRemoved_args)
-      result = SendChatRemoved_result.new()
-      begin
-        @handler.sendChatRemoved(args.seq, args.chatMid, args.lastMessageId, args.sessionId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'sendChatRemoved', seqid)
-    end
-
-    def process_removeAllMessages(seqid, iprot, oprot)
-      args = read_args(iprot, RemoveAllMessages_args)
-      result = RemoveAllMessages_result.new()
-      begin
-        @handler.removeAllMessages(args.seq, args.lastMessageId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'removeAllMessages', seqid)
-    end
-
-    def process_updateAccountMigrationPincode(seqid, iprot, oprot)
-      args = read_args(iprot, UpdateAccountMigrationPincode_args)
-      result = UpdateAccountMigrationPincode_result.new()
-      begin
-        @handler.updateAccountMigrationPincode(args.accountMigrationPincode)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'updateAccountMigrationPincode', seqid)
-    end
-
-    def process_inviteIntoRoom(seqid, iprot, oprot)
-      args = read_args(iprot, InviteIntoRoom_args)
-      result = InviteIntoRoom_result.new()
-      begin
-        @handler.inviteIntoRoom(args.reqSeq, args.roomId, args.contactIds)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'inviteIntoRoom', seqid)
-    end
-
-    def process_findAndAddContactsByMid(seqid, iprot, oprot)
-      args = read_args(iprot, FindAndAddContactsByMid_args)
-      result = FindAndAddContactsByMid_result.new()
-      begin
-        result.success = @handler.findAndAddContactsByMid(args.reqSeq, args.mid, args.type, args.reference)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'findAndAddContactsByMid', seqid)
-    end
-
-    def process_getCountryWithRequestIp(seqid, iprot, oprot)
-      args = read_args(iprot, GetCountryWithRequestIp_args)
-      result = GetCountryWithRequestIp_result.new()
-      @handler.getCountryWithRequestIp()
-      write_result(result, oprot, 'getCountryWithRequestIp', seqid)
-    end
-
-    def process_inviteFriendsBySms(seqid, iprot, oprot)
-      args = read_args(iprot, InviteFriendsBySms_args)
-      result = InviteFriendsBySms_result.new()
-      begin
-        @handler.inviteFriendsBySms(args.phoneNumberList)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'inviteFriendsBySms', seqid)
-    end
-
-    def process_findAndAddContactsByUserid(seqid, iprot, oprot)
-      args = read_args(iprot, FindAndAddContactsByUserid_args)
-      result = FindAndAddContactsByUserid_result.new()
-      begin
-        result.success = @handler.findAndAddContactsByUserid(args.reqSeq, args.searchId, args.reference)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'findAndAddContactsByUserid', seqid)
-    end
-
-    def process_getRecommendationIds(seqid, iprot, oprot)
-      args = read_args(iprot, GetRecommendationIds_args)
-      result = GetRecommendationIds_result.new()
-      begin
-        result.success = @handler.getRecommendationIds(args.syncReason)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getRecommendationIds', seqid)
-    end
-
-    def process_updateContactSetting(seqid, iprot, oprot)
-      args = read_args(iprot, UpdateContactSetting_args)
-      result = UpdateContactSetting_result.new()
-      begin
-        @handler.updateContactSetting(args.reqSeq, args.mid, args.flag, args.value)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'updateContactSetting', seqid)
-    end
-
-    def process_verifyIdentityCredentialWithResult(seqid, iprot, oprot)
-      args = read_args(iprot, VerifyIdentityCredentialWithResult_args)
-      result = VerifyIdentityCredentialWithResult_result.new()
-      begin
-        result.success = @handler.verifyIdentityCredentialWithResult(args.identityCredential, args.migrationPincodeSessionId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'verifyIdentityCredentialWithResult', seqid)
-    end
-
-    def process_openProximityMatch(seqid, iprot, oprot)
-      args = read_args(iprot, OpenProximityMatch_args)
-      result = OpenProximityMatch_result.new()
-      begin
-        result.success = @handler.openProximityMatch(args.location, args.networkStatus)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'openProximityMatch', seqid)
-    end
-
-    def process_getContacts(seqid, iprot, oprot)
-      args = read_args(iprot, GetContacts_args)
-      result = GetContacts_result.new()
-      begin
-        result.success = @handler.getContacts(args.ids)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getContacts', seqid)
-    end
-
-    def process_findAndAddContactByMetaTag(seqid, iprot, oprot)
-      args = read_args(iprot, FindAndAddContactByMetaTag_args)
-      result = FindAndAddContactByMetaTag_result.new()
-      begin
-        result.success = @handler.findAndAddContactByMetaTag(args.reqSeq, args.searchId, args.reference)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'findAndAddContactByMetaTag', seqid)
-    end
-
-    def process_syncContacts(seqid, iprot, oprot)
-      args = read_args(iprot, SyncContacts_args)
-      result = SyncContacts_result.new()
-      begin
-        result.success = @handler.syncContacts(args.reqSeq, args.localContacts)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'syncContacts', seqid)
-    end
-
-    def process_unblockContact(seqid, iprot, oprot)
-      args = read_args(iprot, UnblockContact_args)
-      result = UnblockContact_result.new()
-      begin
-        @handler.unblockContact(args.reqSeq, args.id, args.reference)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'unblockContact', seqid)
-    end
-
-    def process_getBlockedContactIds(seqid, iprot, oprot)
-      args = read_args(iprot, GetBlockedContactIds_args)
-      result = GetBlockedContactIds_result.new()
-      @handler.getBlockedContactIds(args.syncReason)
-      write_result(result, oprot, 'getBlockedContactIds', seqid)
-    end
-
-    def process_notifyRegistrationComplete(seqid, iprot, oprot)
-      args = read_args(iprot, NotifyRegistrationComplete_args)
-      result = NotifyRegistrationComplete_result.new()
-      begin
-        @handler.notifyRegistrationComplete(args.udidHash, args.applicationTypeWithExtensions)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'notifyRegistrationComplete', seqid)
-    end
-
-    def process_getAllContactIds(seqid, iprot, oprot)
-      args = read_args(iprot, GetAllContactIds_args)
-      result = GetAllContactIds_result.new()
-      begin
-        result.success = @handler.getAllContactIds(args.syncReason)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getAllContactIds', seqid)
-    end
-
-    def process_acquireEncryptedAccessToken(seqid, iprot, oprot)
-      args = read_args(iprot, AcquireEncryptedAccessToken_args)
-      result = AcquireEncryptedAccessToken_result.new()
-      begin
-        result.success = @handler.acquireEncryptedAccessToken(args.featureType)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'acquireEncryptedAccessToken', seqid)
-    end
-
-    def process_verifyAccountMigration(seqid, iprot, oprot)
-      args = read_args(iprot, VerifyAccountMigration_args)
-      result = VerifyAccountMigration_result.new()
-      begin
-        @handler.verifyAccountMigration(args.migrationSessionId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'verifyAccountMigration', seqid)
-    end
-
-    def process_notifyUpdated(seqid, iprot, oprot)
-      args = read_args(iprot, NotifyUpdated_args)
-      result = NotifyUpdated_result.new()
-      begin
-        @handler.notifyUpdated(args.lastRev, args.deviceInfo, args.udidHash, args.oldUdidHash)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'notifyUpdated', seqid)
-    end
-
-    def process_leaveRoom(seqid, iprot, oprot)
-      args = read_args(iprot, LeaveRoom_args)
-      result = LeaveRoom_result.new()
-      begin
-        @handler.leaveRoom(args.reqSeq, args.roomId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'leaveRoom', seqid)
-    end
-
-    def process_createAccountMigrationPincodeSession(seqid, iprot, oprot)
-      args = read_args(iprot, CreateAccountMigrationPincodeSession_args)
-      result = CreateAccountMigrationPincodeSession_result.new()
-      begin
-        result.success = @handler.createAccountMigrationPincodeSession()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'createAccountMigrationPincodeSession', seqid)
-    end
-
-    def process_noop(seqid, iprot, oprot)
-      args = read_args(iprot, Noop_args)
-      result = Noop_result.new()
-      begin
-        @handler.noop()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'noop', seqid)
-    end
-
-    def process_unregisterUserAndDevice(seqid, iprot, oprot)
-      args = read_args(iprot, UnregisterUserAndDevice_args)
-      result = UnregisterUserAndDevice_result.new()
-      begin
-        result.success = @handler.unregisterUserAndDevice()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'unregisterUserAndDevice', seqid)
-    end
-
-    def process_blockContact(seqid, iprot, oprot)
-      args = read_args(iprot, BlockContact_args)
-      result = BlockContact_result.new()
-      begin
-        @handler.blockContact(args.reqSeq, args.id)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'blockContact', seqid)
-    end
-
-    def process_notifyInstalled(seqid, iprot, oprot)
-      args = read_args(iprot, NotifyInstalled_args)
-      result = NotifyInstalled_result.new()
-      begin
-        @handler.notifyInstalled(args.udidHash, args.applicationTypeWithExtensions)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'notifyInstalled', seqid)
-    end
-
-    def process_unblockRecommendation(seqid, iprot, oprot)
-      args = read_args(iprot, UnblockRecommendation_args)
-      result = UnblockRecommendation_result.new()
-      begin
-        @handler.unblockRecommendation(args.reqSeq, args.id)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'unblockRecommendation', seqid)
+      write_result(result, oprot, 'findAndAddContactsByPhone', seqid)
     end
 
     def process_registerE2EEPublicKey(seqid, iprot, oprot)
@@ -2160,81 +1775,15 @@ module TalkService
       write_result(result, oprot, 'getContact', seqid)
     end
 
-    def process_blockRecommendation(seqid, iprot, oprot)
-      args = read_args(iprot, BlockRecommendation_args)
-      result = BlockRecommendation_result.new()
+    def process_respondE2EEKeyExchange(seqid, iprot, oprot)
+      args = read_args(iprot, RespondE2EEKeyExchange_args)
+      result = RespondE2EEKeyExchange_result.new()
       begin
-        @handler.blockRecommendation(args.reqSeq, args.id)
+        @handler.respondE2EEKeyExchange(args.reqSeq, args.encryptedKeyChain, args.hashKeyChain)
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'blockRecommendation', seqid)
-    end
-
-    def process_acceptProximityMatches(seqid, iprot, oprot)
-      args = read_args(iprot, AcceptProximityMatches_args)
-      result = AcceptProximityMatches_result.new()
-      begin
-        @handler.acceptProximityMatches(args.sessionId, args.ids)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'acceptProximityMatches', seqid)
-    end
-
-    def process_findAndAddContactsByPhone(seqid, iprot, oprot)
-      args = read_args(iprot, FindAndAddContactsByPhone_args)
-      result = FindAndAddContactsByPhone_result.new()
-      begin
-        result.success = @handler.findAndAddContactsByPhone(args.reqSeq, args.phones, args.reference)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'findAndAddContactsByPhone', seqid)
-    end
-
-    def process_closeProximityMatch(seqid, iprot, oprot)
-      args = read_args(iprot, CloseProximityMatch_args)
-      result = CloseProximityMatch_result.new()
-      begin
-        @handler.closeProximityMatch(args.sessionId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'closeProximityMatch', seqid)
-    end
-
-    def process_registerUserid(seqid, iprot, oprot)
-      args = read_args(iprot, RegisterUserid_args)
-      result = RegisterUserid_result.new()
-      begin
-        @handler.registerUserid(args.reqSeq, args.searchId)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'registerUserid', seqid)
-    end
-
-    def process_getAnalyticsInfo(seqid, iprot, oprot)
-      args = read_args(iprot, GetAnalyticsInfo_args)
-      result = GetAnalyticsInfo_result.new()
-      begin
-        result.success = @handler.getAnalyticsInfo()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getAnalyticsInfo', seqid)
-    end
-
-    def process_getEncryptedIdentityV3(seqid, iprot, oprot)
-      args = read_args(iprot, GetEncryptedIdentityV3_args)
-      result = GetEncryptedIdentityV3_result.new()
-      begin
-        result.success = @handler.getEncryptedIdentityV3()
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getEncryptedIdentityV3', seqid)
+      write_result(result, oprot, 'respondE2EEKeyExchange', seqid)
     end
 
     def process_notifySleep(seqid, iprot, oprot)
@@ -2248,22 +1797,374 @@ module TalkService
       write_result(result, oprot, 'notifySleep', seqid)
     end
 
-    def process_acceptChatInvitation(seqid, iprot, oprot)
-      args = read_args(iprot, AcceptChatInvitation_args)
-      result = AcceptChatInvitation_result.new()
-      @handler.acceptChatInvitation(args.request)
-      write_result(result, oprot, 'acceptChatInvitation', seqid)
-    end
-
-    def process_getMessageBoxes(seqid, iprot, oprot)
-      args = read_args(iprot, GetMessageBoxes_args)
-      result = GetMessageBoxes_result.new()
+    def process_getAnalyticsInfo(seqid, iprot, oprot)
+      args = read_args(iprot, GetAnalyticsInfo_args)
+      result = GetAnalyticsInfo_result.new()
       begin
-        result.success = @handler.getMessageBoxes(args.messageBoxListRequest, args.syncReason)
+        result.success = @handler.getAnalyticsInfo()
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'getMessageBoxes', seqid)
+      write_result(result, oprot, 'getAnalyticsInfo', seqid)
+    end
+
+    def process_sendChatRemoved(seqid, iprot, oprot)
+      args = read_args(iprot, SendChatRemoved_args)
+      result = SendChatRemoved_result.new()
+      begin
+        @handler.sendChatRemoved(args.seq, args.chatMid, args.lastMessageId, args.sessionId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'sendChatRemoved', seqid)
+    end
+
+    def process_blockContact(seqid, iprot, oprot)
+      args = read_args(iprot, BlockContact_args)
+      result = BlockContact_result.new()
+      begin
+        @handler.blockContact(args.reqSeq, args.id)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'blockContact', seqid)
+    end
+
+    def process_removeAllMessages(seqid, iprot, oprot)
+      args = read_args(iprot, RemoveAllMessages_args)
+      result = RemoveAllMessages_result.new()
+      begin
+        @handler.removeAllMessages(args.seq, args.lastMessageId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'removeAllMessages', seqid)
+    end
+
+    def process_negotiateE2EEPublicKey(seqid, iprot, oprot)
+      args = read_args(iprot, NegotiateE2EEPublicKey_args)
+      result = NegotiateE2EEPublicKey_result.new()
+      begin
+        result.success = @handler.negotiateE2EEPublicKey(args.mid)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'negotiateE2EEPublicKey', seqid)
+    end
+
+    def process_openProximityMatch(seqid, iprot, oprot)
+      args = read_args(iprot, OpenProximityMatch_args)
+      result = OpenProximityMatch_result.new()
+      begin
+        result.success = @handler.openProximityMatch(args.location, args.networkStatus)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'openProximityMatch', seqid)
+    end
+
+    def process_findAndAddContactByMetaTag(seqid, iprot, oprot)
+      args = read_args(iprot, FindAndAddContactByMetaTag_args)
+      result = FindAndAddContactByMetaTag_result.new()
+      begin
+        result.success = @handler.findAndAddContactByMetaTag(args.reqSeq, args.searchId, args.reference)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'findAndAddContactByMetaTag', seqid)
+    end
+
+    def process_findAndAddContactsByMid(seqid, iprot, oprot)
+      args = read_args(iprot, FindAndAddContactsByMid_args)
+      result = FindAndAddContactsByMid_result.new()
+      begin
+        result.success = @handler.findAndAddContactsByMid(args.reqSeq, args.mid, args.type, args.reference)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'findAndAddContactsByMid', seqid)
+    end
+
+    def process_updateAccountMigrationPincode(seqid, iprot, oprot)
+      args = read_args(iprot, UpdateAccountMigrationPincode_args)
+      result = UpdateAccountMigrationPincode_result.new()
+      begin
+        @handler.updateAccountMigrationPincode(args.accountMigrationPincode)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'updateAccountMigrationPincode', seqid)
+    end
+
+    def process_sendMessage(seqid, iprot, oprot)
+      args = read_args(iprot, SendMessage_args)
+      result = SendMessage_result.new()
+      begin
+        result.success = @handler.sendMessage(args.seq, args.message)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'sendMessage', seqid)
+    end
+
+    def process_updateContactSetting(seqid, iprot, oprot)
+      args = read_args(iprot, UpdateContactSetting_args)
+      result = UpdateContactSetting_result.new()
+      begin
+        @handler.updateContactSetting(args.reqSeq, args.mid, args.flag, args.value)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'updateContactSetting', seqid)
+    end
+
+    def process_findAndAddContactsByUserid(seqid, iprot, oprot)
+      args = read_args(iprot, FindAndAddContactsByUserid_args)
+      result = FindAndAddContactsByUserid_result.new()
+      begin
+        result.success = @handler.findAndAddContactsByUserid(args.reqSeq, args.searchId, args.reference)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'findAndAddContactsByUserid', seqid)
+    end
+
+    def process_getCountryWithRequestIp(seqid, iprot, oprot)
+      args = read_args(iprot, GetCountryWithRequestIp_args)
+      result = GetCountryWithRequestIp_result.new()
+      begin
+        result.success = @handler.getCountryWithRequestIp()
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getCountryWithRequestIp', seqid)
+    end
+
+    def process_inviteIntoRoom(seqid, iprot, oprot)
+      args = read_args(iprot, InviteIntoRoom_args)
+      result = InviteIntoRoom_result.new()
+      begin
+        @handler.inviteIntoRoom(args.reqSeq, args.roomId, args.contactIds)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'inviteIntoRoom', seqid)
+    end
+
+    def process_inviteFriendsBySms(seqid, iprot, oprot)
+      args = read_args(iprot, InviteFriendsBySms_args)
+      result = InviteFriendsBySms_result.new()
+      begin
+        @handler.inviteFriendsBySms(args.phoneNumberList)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'inviteFriendsBySms', seqid)
+    end
+
+    def process_getContacts(seqid, iprot, oprot)
+      args = read_args(iprot, GetContacts_args)
+      result = GetContacts_result.new()
+      begin
+        result.success = @handler.getContacts(args.ids)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getContacts', seqid)
+    end
+
+    def process_syncContacts(seqid, iprot, oprot)
+      args = read_args(iprot, SyncContacts_args)
+      result = SyncContacts_result.new()
+      begin
+        result.success = @handler.syncContacts(args.reqSeq, args.localContacts)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'syncContacts', seqid)
+    end
+
+    def process_verifyAccountMigration(seqid, iprot, oprot)
+      args = read_args(iprot, VerifyAccountMigration_args)
+      result = VerifyAccountMigration_result.new()
+      begin
+        @handler.verifyAccountMigration(args.migrationSessionId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'verifyAccountMigration', seqid)
+    end
+
+    def process_verifyIdentityCredentialWithResult(seqid, iprot, oprot)
+      args = read_args(iprot, VerifyIdentityCredentialWithResult_args)
+      result = VerifyIdentityCredentialWithResult_result.new()
+      begin
+        result.success = @handler.verifyIdentityCredentialWithResult(args.identityCredential, args.migrationPincodeSessionId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'verifyIdentityCredentialWithResult', seqid)
+    end
+
+    def process_leaveRoom(seqid, iprot, oprot)
+      args = read_args(iprot, LeaveRoom_args)
+      result = LeaveRoom_result.new()
+      begin
+        @handler.leaveRoom(args.reqSeq, args.roomId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'leaveRoom', seqid)
+    end
+
+    def process_createAccountMigrationPincodeSession(seqid, iprot, oprot)
+      args = read_args(iprot, CreateAccountMigrationPincodeSession_args)
+      result = CreateAccountMigrationPincodeSession_result.new()
+      begin
+        result.success = @handler.createAccountMigrationPincodeSession()
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'createAccountMigrationPincodeSession', seqid)
+    end
+
+    def process_notifyRegistrationComplete(seqid, iprot, oprot)
+      args = read_args(iprot, NotifyRegistrationComplete_args)
+      result = NotifyRegistrationComplete_result.new()
+      begin
+        @handler.notifyRegistrationComplete(args.udidHash, args.applicationTypeWithExtensions)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'notifyRegistrationComplete', seqid)
+    end
+
+    def process_unblockContact(seqid, iprot, oprot)
+      args = read_args(iprot, UnblockContact_args)
+      result = UnblockContact_result.new()
+      begin
+        @handler.unblockContact(args.reqSeq, args.id, args.reference)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'unblockContact', seqid)
+    end
+
+    def process_noop(seqid, iprot, oprot)
+      args = read_args(iprot, Noop_args)
+      result = Noop_result.new()
+      begin
+        @handler.noop()
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'noop', seqid)
+    end
+
+    def process_blockRecommendation(seqid, iprot, oprot)
+      args = read_args(iprot, BlockRecommendation_args)
+      result = BlockRecommendation_result.new()
+      begin
+        @handler.blockRecommendation(args.reqSeq, args.id)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'blockRecommendation', seqid)
+    end
+
+    def process_unregisterUserAndDevice(seqid, iprot, oprot)
+      args = read_args(iprot, UnregisterUserAndDevice_args)
+      result = UnregisterUserAndDevice_result.new()
+      begin
+        result.success = @handler.unregisterUserAndDevice()
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'unregisterUserAndDevice', seqid)
+    end
+
+    def process_notifyUpdated(seqid, iprot, oprot)
+      args = read_args(iprot, NotifyUpdated_args)
+      result = NotifyUpdated_result.new()
+      begin
+        @handler.notifyUpdated(args.lastRev, args.deviceInfo, args.udidHash, args.oldUdidHash)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'notifyUpdated', seqid)
+    end
+
+    def process_acquireEncryptedAccessToken(seqid, iprot, oprot)
+      args = read_args(iprot, AcquireEncryptedAccessToken_args)
+      result = AcquireEncryptedAccessToken_result.new()
+      begin
+        result.success = @handler.acquireEncryptedAccessToken(args.featureType)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'acquireEncryptedAccessToken', seqid)
+    end
+
+    def process_acceptProximityMatches(seqid, iprot, oprot)
+      args = read_args(iprot, AcceptProximityMatches_args)
+      result = AcceptProximityMatches_result.new()
+      begin
+        @handler.acceptProximityMatches(args.sessionId, args.ids)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'acceptProximityMatches', seqid)
+    end
+
+    def process_closeProximityMatch(seqid, iprot, oprot)
+      args = read_args(iprot, CloseProximityMatch_args)
+      result = CloseProximityMatch_result.new()
+      begin
+        @handler.closeProximityMatch(args.sessionId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'closeProximityMatch', seqid)
+    end
+
+    def process_unblockRecommendation(seqid, iprot, oprot)
+      args = read_args(iprot, UnblockRecommendation_args)
+      result = UnblockRecommendation_result.new()
+      begin
+        @handler.unblockRecommendation(args.reqSeq, args.id)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'unblockRecommendation', seqid)
+    end
+
+    def process_registerUserid(seqid, iprot, oprot)
+      args = read_args(iprot, RegisterUserid_args)
+      result = RegisterUserid_result.new()
+      begin
+        @handler.registerUserid(args.reqSeq, args.searchId)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'registerUserid', seqid)
+    end
+
+    def process_notifyInstalled(seqid, iprot, oprot)
+      args = read_args(iprot, NotifyInstalled_args)
+      result = NotifyInstalled_result.new()
+      @handler.notifyInstalled(args.udidHash, args.applicationTypeWithExtensions)
+      write_result(result, oprot, 'notifyInstalled', seqid)
+    end
+
+    def process_acceptChatInvitation(seqid, iprot, oprot)
+      args = read_args(iprot, AcceptChatInvitation_args)
+      result = AcceptChatInvitation_result.new()
+      begin
+        result.success = @handler.acceptChatInvitation(args.request)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'acceptChatInvitation', seqid)
     end
 
     def process_acceptChatInvitationByTicket(seqid, iprot, oprot)
@@ -2275,17 +2176,6 @@ module TalkService
         result.e = e
       end
       write_result(result, oprot, 'acceptChatInvitationByTicket', seqid)
-    end
-
-    def process_getProfile(seqid, iprot, oprot)
-      args = read_args(iprot, GetProfile_args)
-      result = GetProfile_result.new()
-      begin
-        result.success = @handler.getProfile(args.syncReason)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getProfile', seqid)
     end
 
     def process_cancelChatInvitation(seqid, iprot, oprot)
@@ -2310,6 +2200,17 @@ module TalkService
       write_result(result, oprot, 'createChat', seqid)
     end
 
+    def process_getExtendedProfile(seqid, iprot, oprot)
+      args = read_args(iprot, GetExtendedProfile_args)
+      result = GetExtendedProfile_result.new()
+      begin
+        result.success = @handler.getExtendedProfile(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getExtendedProfile', seqid)
+    end
+
     def process_deleteOtherFromChat(seqid, iprot, oprot)
       args = read_args(iprot, DeleteOtherFromChat_args)
       result = DeleteOtherFromChat_result.new()
@@ -2319,6 +2220,17 @@ module TalkService
         result.e = e
       end
       write_result(result, oprot, 'deleteOtherFromChat', seqid)
+    end
+
+    def process_getMessageBoxes(seqid, iprot, oprot)
+      args = read_args(iprot, GetMessageBoxes_args)
+      result = GetMessageBoxes_result.new()
+      begin
+        result.success = @handler.getMessageBoxes(args.messageBoxListRequest, args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getMessageBoxes', seqid)
     end
 
     def process_deleteSelfFromChat(seqid, iprot, oprot)
@@ -2332,33 +2244,37 @@ module TalkService
       write_result(result, oprot, 'deleteSelfFromChat', seqid)
     end
 
-    def process_getSettings(seqid, iprot, oprot)
-      args = read_args(iprot, GetSettings_args)
-      result = GetSettings_result.new()
+    def process_getProfile(seqid, iprot, oprot)
+      args = read_args(iprot, GetProfile_args)
+      result = GetProfile_result.new()
       begin
-        result.success = @handler.getSettings(args.syncReason)
+        result.success = @handler.getProfile(args.syncReason)
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'getSettings', seqid)
+      write_result(result, oprot, 'getProfile', seqid)
     end
 
     def process_findChatByTicket(seqid, iprot, oprot)
       args = read_args(iprot, FindChatByTicket_args)
       result = FindChatByTicket_result.new()
-      @handler.findChatByTicket(args.request)
-      write_result(result, oprot, 'findChatByTicket', seqid)
-    end
-
-    def process_getSettingsAttributes2(seqid, iprot, oprot)
-      args = read_args(iprot, GetSettingsAttributes2_args)
-      result = GetSettingsAttributes2_result.new()
       begin
-        result.success = @handler.getSettingsAttributes2(args.attributesToRetrieve)
+        result.success = @handler.findChatByTicket(args.request)
       rescue ::TalkException => e
         result.e = e
       end
-      write_result(result, oprot, 'getSettingsAttributes2', seqid)
+      write_result(result, oprot, 'findChatByTicket', seqid)
+    end
+
+    def process_getRecommendationIds(seqid, iprot, oprot)
+      args = read_args(iprot, GetRecommendationIds_args)
+      result = GetRecommendationIds_result.new()
+      begin
+        result.success = @handler.getRecommendationIds(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getRecommendationIds', seqid)
     end
 
     def process_getAllChatMids(seqid, iprot, oprot)
@@ -2372,6 +2288,72 @@ module TalkService
       write_result(result, oprot, 'getAllChatMids', seqid)
     end
 
+    def process_getAllContactIds(seqid, iprot, oprot)
+      args = read_args(iprot, GetAllContactIds_args)
+      result = GetAllContactIds_result.new()
+      begin
+        result.success = @handler.getAllContactIds(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getAllContactIds', seqid)
+    end
+
+    def process_getBlockedContactIds(seqid, iprot, oprot)
+      args = read_args(iprot, GetBlockedContactIds_args)
+      result = GetBlockedContactIds_result.new()
+      begin
+        result.success = @handler.getBlockedContactIds(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getBlockedContactIds', seqid)
+    end
+
+    def process_getBlockedRecommendationIds(seqid, iprot, oprot)
+      args = read_args(iprot, GetBlockedRecommendationIds_args)
+      result = GetBlockedRecommendationIds_result.new()
+      begin
+        result.success = @handler.getBlockedRecommendationIds(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getBlockedRecommendationIds', seqid)
+    end
+
+    def process_getSettings(seqid, iprot, oprot)
+      args = read_args(iprot, GetSettings_args)
+      result = GetSettings_result.new()
+      begin
+        result.success = @handler.getSettings(args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getSettings', seqid)
+    end
+
+    def process_getSettingsAttributes2(seqid, iprot, oprot)
+      args = read_args(iprot, GetSettingsAttributes2_args)
+      result = GetSettingsAttributes2_result.new()
+      begin
+        result.success = @handler.getSettingsAttributes2(args.attributesToRetrieve)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getSettingsAttributes2', seqid)
+    end
+
+    def process_getChatEffectMetaList(seqid, iprot, oprot)
+      args = read_args(iprot, GetChatEffectMetaList_args)
+      result = GetChatEffectMetaList_result.new()
+      begin
+        result.success = @handler.getChatEffectMetaList(args.categories)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getChatEffectMetaList', seqid)
+    end
+
     def process_inviteIntoChat(seqid, iprot, oprot)
       args = read_args(iprot, InviteIntoChat_args)
       result = InviteIntoChat_result.new()
@@ -2381,6 +2363,28 @@ module TalkService
         result.e = e
       end
       write_result(result, oprot, 'inviteIntoChat', seqid)
+    end
+
+    def process_getChatRoomAnnouncementsBulk(seqid, iprot, oprot)
+      args = read_args(iprot, GetChatRoomAnnouncementsBulk_args)
+      result = GetChatRoomAnnouncementsBulk_result.new()
+      begin
+        result.success = @handler.getChatRoomAnnouncementsBulk(args.chatRoomMids, args.syncReason)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getChatRoomAnnouncementsBulk', seqid)
+    end
+
+    def process_generateUserTicket(seqid, iprot, oprot)
+      args = read_args(iprot, GenerateUserTicket_args)
+      result = GenerateUserTicket_result.new()
+      begin
+        @handler.generateUserTicket(args.expirationTime, args.maxUseCount)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'generateUserTicket', seqid)
     end
 
     def process_reissueChatTicket(seqid, iprot, oprot)
@@ -2397,23 +2401,8 @@ module TalkService
     def process_rejectChatInvitation(seqid, iprot, oprot)
       args = read_args(iprot, RejectChatInvitation_args)
       result = RejectChatInvitation_result.new()
-      begin
-        result.success = @handler.rejectChatInvitation(args.request)
-      rescue ::TalkException => e
-        result.e = e
-      end
+      @handler.rejectChatInvitation(args.request)
       write_result(result, oprot, 'rejectChatInvitation', seqid)
-    end
-
-    def process_getChatEffectMetaList(seqid, iprot, oprot)
-      args = read_args(iprot, GetChatEffectMetaList_args)
-      result = GetChatEffectMetaList_result.new()
-      begin
-        result.success = @handler.getChatEffectMetaList(args.categories)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getChatEffectMetaList', seqid)
     end
 
     def process_setNotificationsEnabled(seqid, iprot, oprot)
@@ -2425,17 +2414,6 @@ module TalkService
         result.e = e
       end
       write_result(result, oprot, 'setNotificationsEnabled', seqid)
-    end
-
-    def process_getChatRoomAnnouncementsBulk(seqid, iprot, oprot)
-      args = read_args(iprot, GetChatRoomAnnouncementsBulk_args)
-      result = GetChatRoomAnnouncementsBulk_result.new()
-      begin
-        result.success = @handler.getChatRoomAnnouncementsBulk(args.chatRoomMids, args.syncReason)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getChatRoomAnnouncementsBulk', seqid)
     end
 
     def process_updateChat(seqid, iprot, oprot)
@@ -2458,17 +2436,6 @@ module TalkService
         result.e = e
       end
       write_result(result, oprot, 'updateSettingsAttributes2', seqid)
-    end
-
-    def process_getExtendedProfile(seqid, iprot, oprot)
-      args = read_args(iprot, GetExtendedProfile_args)
-      result = GetExtendedProfile_result.new()
-      begin
-        result.success = @handler.getExtendedProfile(args.syncReason)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getExtendedProfile', seqid)
     end
 
     def process_getChats(seqid, iprot, oprot)
@@ -2507,11 +2474,7 @@ module TalkService
     def process_getRoomsV2(seqid, iprot, oprot)
       args = read_args(iprot, GetRoomsV2_args)
       result = GetRoomsV2_result.new()
-      begin
-        result.success = @handler.getRoomsV2(args.roomIds)
-      rescue ::TalkException => e
-        result.e = e
-      end
+      @handler.getRoomsV2(args.roomIds)
       write_result(result, oprot, 'getRoomsV2', seqid)
     end
 
@@ -2524,13 +2487,13 @@ module TalkService
     SYNCREASON = 1
 
     FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -2562,14 +2525,14 @@ module TalkService
     LASTSEENSEQID = 2
 
     FIELDS = {
-      DIRECTION => {:type => ::Thrift::Types::I32, :name => 'direction', :enum_class => ::J0_a_e_a_b_wa},
+      DIRECTION => {:type => ::Thrift::Types::I32, :name => 'direction', :enum_class => ::P0_a_e_a_b_xa},
       LASTSEENSEQID => {:type => ::Thrift::Types::I64, :name => 'lastSeenSeqId'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @direction.nil? || ::J0_a_e_a_b_wa::VALID_VALUES.include?(@direction)
+      unless @direction.nil? || ::P0_a_e_a_b_xa::VALID_VALUES.include?(@direction)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field direction!')
       end
     end
@@ -2601,14 +2564,14 @@ module TalkService
     MIDOREMID = 2
 
     FIELDS = {
-      DIRECTION => {:type => ::Thrift::Types::I32, :name => 'direction', :enum_class => ::J0_a_e_a_b_wa},
+      DIRECTION => {:type => ::Thrift::Types::I32, :name => 'direction', :enum_class => ::P0_a_e_a_b_xa},
       MIDOREMID => {:type => ::Thrift::Types::STRING, :name => 'midOrEMid'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @direction.nil? || ::J0_a_e_a_b_wa::VALID_VALUES.include?(@direction)
+      unless @direction.nil? || ::P0_a_e_a_b_xa::VALID_VALUES.include?(@direction)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field direction!')
       end
     end
@@ -2639,13 +2602,13 @@ module TalkService
 
     FIELDS = {
       CHATIDS => {:type => ::Thrift::Types::LIST, :name => 'chatIds', :element => {:type => ::Thrift::Types::STRING}},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -2703,123 +2666,14 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetLastOpRevision_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetLastOpRevision_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::I64, :name => 'success'},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FetchOperations_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LOCALREV = 2
-    COUNT = 3
-
-    FIELDS = {
-      LOCALREV => {:type => ::Thrift::Types::I64, :name => 'localRev'},
-      COUNT => {:type => ::Thrift::Types::I32, :name => 'count'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FetchOperations_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Operation}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FetchOps_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LOCALREV = 2
-    COUNT = 3
-    GLOBALREV = 4
-    INDIVIDUALREV = 5
-
-    FIELDS = {
-      LOCALREV => {:type => ::Thrift::Types::I64, :name => 'localRev'},
-      COUNT => {:type => ::Thrift::Types::I32, :name => 'count'},
-      GLOBALREV => {:type => ::Thrift::Types::I64, :name => 'globalRev'},
-      INDIVIDUALREV => {:type => ::Thrift::Types::I64, :name => 'individualRev'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FetchOps_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Operation}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
   class ReportDeviceState_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     BOOLEANSTATE = 2
     STRINGSTATE = 3
 
     FIELDS = {
-      BOOLEANSTATE => {:type => ::Thrift::Types::MAP, :name => 'booleanState', :key => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_p9}, :value => {:type => ::Thrift::Types::BOOL}},
-      STRINGSTATE => {:type => ::Thrift::Types::MAP, :name => 'stringState', :key => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_r9}, :value => {:type => ::Thrift::Types::STRING}}
+      BOOLEANSTATE => {:type => ::Thrift::Types::MAP, :name => 'booleanState', :key => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_q9}, :value => {:type => ::Thrift::Types::BOOL}},
+      STRINGSTATE => {:type => ::Thrift::Types::MAP, :name => 'stringState', :key => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_s9}, :value => {:type => ::Thrift::Types::STRING}}
     }
 
     def struct_fields; FIELDS; end
@@ -2893,7 +2747,7 @@ module TalkService
     OLDUDIDHASH = 6
 
     FIELDS = {
-      SNSIDTYPE => {:type => ::Thrift::Types::I32, :name => 'snsIdType', :enum_class => ::J0_a_e_a_b_ig},
+      SNSIDTYPE => {:type => ::Thrift::Types::I32, :name => 'snsIdType', :enum_class => ::P0_a_e_a_b_jg},
       SNSACCESSTOKEN => {:type => ::Thrift::Types::STRING, :name => 'snsAccessToken'},
       UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
       MIGRATIONPINCODESESSIONID => {:type => ::Thrift::Types::STRING, :name => 'migrationPincodeSessionId'},
@@ -2903,7 +2757,7 @@ module TalkService
     def struct_fields; FIELDS; end
 
     def validate
-      unless @snsIdType.nil? || ::J0_a_e_a_b_ig::VALID_VALUES.include?(@snsIdType)
+      unless @snsIdType.nil? || ::P0_a_e_a_b_jg::VALID_VALUES.include?(@snsIdType)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field snsIdType!')
       end
     end
@@ -2934,13 +2788,13 @@ module TalkService
     PROVIDER = 2
 
     FIELDS = {
-      PROVIDER => {:type => ::Thrift::Types::I32, :name => 'provider', :enum_class => ::J0_a_e_a_b_rc}
+      PROVIDER => {:type => ::Thrift::Types::I32, :name => 'provider', :enum_class => ::P0_a_e_a_b_sc}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @provider.nil? || ::J0_a_e_a_b_rc::VALID_VALUES.include?(@provider)
+      unless @provider.nil? || ::P0_a_e_a_b_sc::VALID_VALUES.include?(@provider)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field provider!')
       end
     end
@@ -2974,14 +2828,14 @@ module TalkService
 
     FIELDS = {
       REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ATTR => {:type => ::Thrift::Types::I32, :name => 'attr', :enum_class => ::J0_a_e_a_b_ea},
+      ATTR => {:type => ::Thrift::Types::I32, :name => 'attr', :enum_class => ::P0_a_e_a_b_fa},
       EXTENDEDPROFILE => {:type => ::Thrift::Types::STRUCT, :name => 'extendedProfile', :class => ::ExtendedProfile}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @attr.nil? || ::J0_a_e_a_b_ea::VALID_VALUES.include?(@attr)
+      unless @attr.nil? || ::P0_a_e_a_b_fa::VALID_VALUES.include?(@attr)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field attr!')
       end
     end
@@ -2991,9 +2845,10 @@ module TalkService
 
   class UpdateExtendedProfileAttribute_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
 
     FIELDS = {
-
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -3091,14 +2946,14 @@ module TalkService
     FIELDS = {
       REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
       CHATROOMMID => {:type => ::Thrift::Types::STRING, :name => 'chatRoomMid'},
-      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::J0_a_e_a_b_o7},
+      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::P0_a_e_a_b_p7},
       CONTENTS => {:type => ::Thrift::Types::STRUCT, :name => 'contents', :class => ::ChatRoomAnnouncementContents}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @type.nil? || ::J0_a_e_a_b_o7::VALID_VALUES.include?(@type)
+      unless @type.nil? || ::P0_a_e_a_b_p7::VALID_VALUES.include?(@type)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field type!')
       end
     end
@@ -3108,9 +2963,12 @@ module TalkService
 
   class CreateChatRoomAnnouncement_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
 
     FIELDS = {
-
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::ChatRoomAnnouncement},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -3198,13 +3056,13 @@ module TalkService
 
     FIELDS = {
       CHATROOMMIDS => {:type => ::Thrift::Types::SET, :name => 'chatRoomMids', :element => {:type => ::Thrift::Types::STRING}},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -3235,13 +3093,13 @@ module TalkService
     COUNTRYGROUP = 2
 
     FIELDS = {
-      COUNTRYGROUP => {:type => ::Thrift::Types::I32, :name => 'countryGroup', :enum_class => ::J0_a_e_a_b_d9}
+      COUNTRYGROUP => {:type => ::Thrift::Types::I32, :name => 'countryGroup', :enum_class => ::P0_a_e_a_b_e9}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @countryGroup.nil? || ::J0_a_e_a_b_d9::VALID_VALUES.include?(@countryGroup)
+      unless @countryGroup.nil? || ::P0_a_e_a_b_e9::VALID_VALUES.include?(@countryGroup)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field countryGroup!')
       end
     end
@@ -3343,13 +3201,13 @@ module TalkService
 
     FIELDS = {
       REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::GetPreviousMessagesV2Request},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -3515,16 +3373,11 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class RespondE2EEKeyExchange_args
+  class GetEncryptedIdentityV3_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    ENCRYPTEDKEYCHAIN = 2
-    HASHKEYCHAIN = 3
 
     FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ENCRYPTEDKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'encryptedKeyChain'},
-      HASHKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'hashKeyChain'}
+
     }
 
     def struct_fields; FIELDS; end
@@ -3535,48 +3388,13 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class RespondE2EEKeyExchange_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetBlockedRecommendationIds_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetBlockedRecommendationIds_result
+  class GetEncryptedIdentityV3_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUCCESS = 0
     E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::GetEncryptedIdentityV3Response},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -3588,1087 +3406,33 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class NegotiateE2EEPublicKey_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    MID = 2
-
-    FIELDS = {
-      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NegotiateE2EEPublicKey_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::E2EENegotiationResult},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SendMessage_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SEQ = 1
-    MESSAGE = 2
-
-    FIELDS = {
-      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
-      MESSAGE => {:type => ::Thrift::Types::STRUCT, :name => 'message', :class => ::Message}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SendMessage_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Message},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SendChatRemoved_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SEQ = 1
-    CHATMID = 2
-    LASTMESSAGEID = 3
-    SESSIONID = 4
-
-    FIELDS = {
-      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
-      CHATMID => {:type => ::Thrift::Types::STRING, :name => 'chatMid'},
-      LASTMESSAGEID => {:type => ::Thrift::Types::STRING, :name => 'lastMessageId'},
-      SESSIONID => {:type => ::Thrift::Types::BYTE, :name => 'sessionId'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SendChatRemoved_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class RemoveAllMessages_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SEQ = 1
-    LASTMESSAGEID = 2
-
-    FIELDS = {
-      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
-      LASTMESSAGEID => {:type => ::Thrift::Types::STRING, :name => 'lastMessageId'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class RemoveAllMessages_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UpdateAccountMigrationPincode_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    ACCOUNTMIGRATIONPINCODE = 2
-
-    FIELDS = {
-      ACCOUNTMIGRATIONPINCODE => {:type => ::Thrift::Types::STRING, :name => 'accountMigrationPincode'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UpdateAccountMigrationPincode_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class InviteIntoRoom_args
+  class FindAndAddContactsByPhone_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     REQSEQ = 1
-    ROOMID = 2
-    CONTACTIDS = 3
+    PHONES = 2
+    REFERENCE = 3
 
     FIELDS = {
       REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ROOMID => {:type => ::Thrift::Types::STRING, :name => 'roomId'},
-      CONTACTIDS => {:type => ::Thrift::Types::LIST, :name => 'contactIds', :element => {:type => ::Thrift::Types::STRING}}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class InviteIntoRoom_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactsByMid_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    MID = 2
-    TYPE = 3
-    REFERENCE = 4
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'},
-      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::J0_a_e_a_b_b9},
+      PHONES => {:type => ::Thrift::Types::SET, :name => 'phones', :element => {:type => ::Thrift::Types::STRING}},
       REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @type.nil? || ::J0_a_e_a_b_b9::VALID_VALUES.include?(@type)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field type!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self
   end
 
-  class FindAndAddContactsByMid_result
+  class FindAndAddContactsByPhone_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUCCESS = 0
     E = 1
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetCountryWithRequestIp_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetCountryWithRequestIp_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class InviteFriendsBySms_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    PHONENUMBERLIST = 2
-
-    FIELDS = {
-      PHONENUMBERLIST => {:type => ::Thrift::Types::LIST, :name => 'phoneNumberList', :element => {:type => ::Thrift::Types::STRING}}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class InviteFriendsBySms_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactsByUserid_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    SEARCHID = 2
-    REFERENCE = 3
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      SEARCHID => {:type => ::Thrift::Types::STRING, :name => 'searchId'},
-      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactsByUserid_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetRecommendationIds_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetRecommendationIds_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UpdateContactSetting_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    MID = 2
-    FLAG = 3
-    VALUE = 4
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'},
-      FLAG => {:type => ::Thrift::Types::I32, :name => 'flag', :enum_class => ::J0_a_e_a_b_z8},
-      VALUE => {:type => ::Thrift::Types::STRING, :name => 'value'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @flag.nil? || ::J0_a_e_a_b_z8::VALID_VALUES.include?(@flag)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field flag!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UpdateContactSetting_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class VerifyIdentityCredentialWithResult_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    IDENTITYCREDENTIAL = 2
-    MIGRATIONPINCODESESSIONID = 3
-
-    FIELDS = {
-      IDENTITYCREDENTIAL => {:type => ::Thrift::Types::STRUCT, :name => 'identityCredential', :class => ::IdentityCredential},
-      MIGRATIONPINCODESESSIONID => {:type => ::Thrift::Types::STRING, :name => 'migrationPincodeSessionId'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class VerifyIdentityCredentialWithResult_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::UserAuthStatus},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class OpenProximityMatch_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LOCATION = 2
-    NETWORKSTATUS = 3
-
-    FIELDS = {
-      LOCATION => {:type => ::Thrift::Types::STRUCT, :name => 'location', :class => ::Location},
-      NETWORKSTATUS => {:type => ::Thrift::Types::STRUCT, :name => 'networkStatus', :class => ::ClientNetworkStatus}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class OpenProximityMatch_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetContacts_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    IDS = 2
-
-    FIELDS = {
-      IDS => {:type => ::Thrift::Types::LIST, :name => 'ids', :element => {:type => ::Thrift::Types::STRING}}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetContacts_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactByMetaTag_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    SEARCHID = 2
-    REFERENCE = 3
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      SEARCHID => {:type => ::Thrift::Types::STRING, :name => 'searchId'},
-      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactByMetaTag_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Contact},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SyncContacts_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    LOCALCONTACTS = 2
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      LOCALCONTACTS => {:type => ::Thrift::Types::LIST, :name => 'localContacts', :element => {:type => ::Thrift::Types::STRUCT, :class => ::ContactModification}}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class SyncContacts_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::ContactRegistration}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnblockContact_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    ID = 2
-    REFERENCE = 3
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ID => {:type => ::Thrift::Types::STRING, :name => 'id'},
-      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnblockContact_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetBlockedContactIds_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetBlockedContactIds_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyRegistrationComplete_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    UDIDHASH = 2
-    APPLICATIONTYPEWITHEXTENSIONS = 3
-
-    FIELDS = {
-      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
-      APPLICATIONTYPEWITHEXTENSIONS => {:type => ::Thrift::Types::STRING, :name => 'applicationTypeWithExtensions'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyRegistrationComplete_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetAllContactIds_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetAllContactIds_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class AcquireEncryptedAccessToken_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    FEATURETYPE = 2
-
-    FIELDS = {
-      FEATURETYPE => {:type => ::Thrift::Types::I32, :name => 'featureType', :enum_class => ::J0_a_e_a_b_na}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @featureType.nil? || ::J0_a_e_a_b_na::VALID_VALUES.include?(@featureType)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field featureType!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class AcquireEncryptedAccessToken_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class VerifyAccountMigration_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    MIGRATIONSESSIONID = 2
-
-    FIELDS = {
-      MIGRATIONSESSIONID => {:type => ::Thrift::Types::STRING, :name => 'migrationSessionId'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class VerifyAccountMigration_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyUpdated_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LASTREV = 2
-    DEVICEINFO = 3
-    UDIDHASH = 4
-    OLDUDIDHASH = 5
-
-    FIELDS = {
-      LASTREV => {:type => ::Thrift::Types::I64, :name => 'lastRev'},
-      DEVICEINFO => {:type => ::Thrift::Types::STRUCT, :name => 'deviceInfo', :class => ::DeviceInfo},
-      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
-      OLDUDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'oldUdidHash'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyUpdated_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class LeaveRoom_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    ROOMID = 2
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ROOMID => {:type => ::Thrift::Types::STRING, :name => 'roomId'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class LeaveRoom_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class CreateAccountMigrationPincodeSession_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class CreateAccountMigrationPincodeSession_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class Noop_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class Noop_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnregisterUserAndDevice_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnregisterUserAndDevice_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class BlockContact_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    ID = 2
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ID => {:type => ::Thrift::Types::STRING, :name => 'id'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class BlockContact_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyInstalled_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    UDIDHASH = 2
-    APPLICATIONTYPEWITHEXTENSIONS = 3
-
-    FIELDS = {
-      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
-      APPLICATIONTYPEWITHEXTENSIONS => {:type => ::Thrift::Types::STRING, :name => 'applicationTypeWithExtensions'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifyInstalled_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnblockRecommendation_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    ID = 2
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ID => {:type => ::Thrift::Types::STRING, :name => 'id'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class UnblockRecommendation_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -4750,6 +3514,920 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
+  class RespondE2EEKeyExchange_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ENCRYPTEDKEYCHAIN = 2
+    HASHKEYCHAIN = 3
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ENCRYPTEDKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'encryptedKeyChain'},
+      HASHKEYCHAIN => {:type => ::Thrift::Types::STRING, :name => 'hashKeyChain'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class RespondE2EEKeyExchange_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifySleep_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LASTREV = 2
+    BADGE = 3
+
+    FIELDS = {
+      LASTREV => {:type => ::Thrift::Types::I64, :name => 'lastRev'},
+      BADGE => {:type => ::Thrift::Types::I32, :name => 'badge'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifySleep_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAnalyticsInfo_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAnalyticsInfo_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AnalyticsInfo},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SendChatRemoved_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SEQ = 1
+    CHATMID = 2
+    LASTMESSAGEID = 3
+    SESSIONID = 4
+
+    FIELDS = {
+      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
+      CHATMID => {:type => ::Thrift::Types::STRING, :name => 'chatMid'},
+      LASTMESSAGEID => {:type => ::Thrift::Types::STRING, :name => 'lastMessageId'},
+      SESSIONID => {:type => ::Thrift::Types::BYTE, :name => 'sessionId'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SendChatRemoved_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class BlockContact_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ID = 2
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ID => {:type => ::Thrift::Types::STRING, :name => 'id'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class BlockContact_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class RemoveAllMessages_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SEQ = 1
+    LASTMESSAGEID = 2
+
+    FIELDS = {
+      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
+      LASTMESSAGEID => {:type => ::Thrift::Types::STRING, :name => 'lastMessageId'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class RemoveAllMessages_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NegotiateE2EEPublicKey_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    MID = 2
+
+    FIELDS = {
+      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NegotiateE2EEPublicKey_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::E2EENegotiationResult},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class OpenProximityMatch_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LOCATION = 2
+    NETWORKSTATUS = 3
+
+    FIELDS = {
+      LOCATION => {:type => ::Thrift::Types::STRUCT, :name => 'location', :class => ::Location},
+      NETWORKSTATUS => {:type => ::Thrift::Types::STRUCT, :name => 'networkStatus', :class => ::ClientNetworkStatus}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class OpenProximityMatch_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactByMetaTag_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    SEARCHID = 2
+    REFERENCE = 3
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      SEARCHID => {:type => ::Thrift::Types::STRING, :name => 'searchId'},
+      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactByMetaTag_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Contact},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactsByMid_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    MID = 2
+    TYPE = 3
+    REFERENCE = 4
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'},
+      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::P0_a_e_a_b_c9},
+      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @type.nil? || ::P0_a_e_a_b_c9::VALID_VALUES.include?(@type)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field type!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactsByMid_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UpdateAccountMigrationPincode_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    ACCOUNTMIGRATIONPINCODE = 2
+
+    FIELDS = {
+      ACCOUNTMIGRATIONPINCODE => {:type => ::Thrift::Types::STRING, :name => 'accountMigrationPincode'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UpdateAccountMigrationPincode_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SendMessage_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SEQ = 1
+    MESSAGE = 2
+
+    FIELDS = {
+      SEQ => {:type => ::Thrift::Types::I32, :name => 'seq'},
+      MESSAGE => {:type => ::Thrift::Types::STRUCT, :name => 'message', :class => ::Message}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SendMessage_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Message},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UpdateContactSetting_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    MID = 2
+    FLAG = 3
+    VALUE = 4
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      MID => {:type => ::Thrift::Types::STRING, :name => 'mid'},
+      FLAG => {:type => ::Thrift::Types::I32, :name => 'flag', :enum_class => ::P0_a_e_a_b_a9},
+      VALUE => {:type => ::Thrift::Types::STRING, :name => 'value'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @flag.nil? || ::P0_a_e_a_b_a9::VALID_VALUES.include?(@flag)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field flag!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UpdateContactSetting_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactsByUserid_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    SEARCHID = 2
+    REFERENCE = 3
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      SEARCHID => {:type => ::Thrift::Types::STRING, :name => 'searchId'},
+      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FindAndAddContactsByUserid_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetCountryWithRequestIp_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetCountryWithRequestIp_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class InviteIntoRoom_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ROOMID = 2
+    CONTACTIDS = 3
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ROOMID => {:type => ::Thrift::Types::STRING, :name => 'roomId'},
+      CONTACTIDS => {:type => ::Thrift::Types::LIST, :name => 'contactIds', :element => {:type => ::Thrift::Types::STRING}}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class InviteIntoRoom_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class InviteFriendsBySms_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    PHONENUMBERLIST = 2
+
+    FIELDS = {
+      PHONENUMBERLIST => {:type => ::Thrift::Types::LIST, :name => 'phoneNumberList', :element => {:type => ::Thrift::Types::STRING}}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class InviteFriendsBySms_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetContacts_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    IDS = 2
+
+    FIELDS = {
+      IDS => {:type => ::Thrift::Types::LIST, :name => 'ids', :element => {:type => ::Thrift::Types::STRING}}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetContacts_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SyncContacts_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    LOCALCONTACTS = 2
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      LOCALCONTACTS => {:type => ::Thrift::Types::LIST, :name => 'localContacts', :element => {:type => ::Thrift::Types::STRUCT, :class => ::ContactModification}}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class SyncContacts_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::ContactRegistration}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class VerifyAccountMigration_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    MIGRATIONSESSIONID = 2
+
+    FIELDS = {
+      MIGRATIONSESSIONID => {:type => ::Thrift::Types::STRING, :name => 'migrationSessionId'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class VerifyAccountMigration_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class VerifyIdentityCredentialWithResult_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    IDENTITYCREDENTIAL = 2
+    MIGRATIONPINCODESESSIONID = 3
+
+    FIELDS = {
+      IDENTITYCREDENTIAL => {:type => ::Thrift::Types::STRUCT, :name => 'identityCredential', :class => ::IdentityCredential},
+      MIGRATIONPINCODESESSIONID => {:type => ::Thrift::Types::STRING, :name => 'migrationPincodeSessionId'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class VerifyIdentityCredentialWithResult_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::UserAuthStatus},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class LeaveRoom_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ROOMID = 2
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ROOMID => {:type => ::Thrift::Types::STRING, :name => 'roomId'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class LeaveRoom_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class CreateAccountMigrationPincodeSession_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class CreateAccountMigrationPincodeSession_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifyRegistrationComplete_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    UDIDHASH = 2
+    APPLICATIONTYPEWITHEXTENSIONS = 3
+
+    FIELDS = {
+      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
+      APPLICATIONTYPEWITHEXTENSIONS => {:type => ::Thrift::Types::STRING, :name => 'applicationTypeWithExtensions'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifyRegistrationComplete_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnblockContact_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ID = 2
+    REFERENCE = 3
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ID => {:type => ::Thrift::Types::STRING, :name => 'id'},
+      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnblockContact_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class Noop_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class Noop_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
   class BlockRecommendation_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     REQSEQ = 1
@@ -4773,6 +4451,114 @@ module TalkService
     E = 1
 
     FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnregisterUserAndDevice_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnregisterUserAndDevice_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifyUpdated_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LASTREV = 2
+    DEVICEINFO = 3
+    UDIDHASH = 4
+    OLDUDIDHASH = 5
+
+    FIELDS = {
+      LASTREV => {:type => ::Thrift::Types::I64, :name => 'lastRev'},
+      DEVICEINFO => {:type => ::Thrift::Types::STRUCT, :name => 'deviceInfo', :class => ::DeviceInfo},
+      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
+      OLDUDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'oldUdidHash'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class NotifyUpdated_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class AcquireEncryptedAccessToken_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    FEATURETYPE = 2
+
+    FIELDS = {
+      FEATURETYPE => {:type => ::Thrift::Types::I32, :name => 'featureType', :enum_class => ::P0_a_e_a_b_oa}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @featureType.nil? || ::P0_a_e_a_b_oa::VALID_VALUES.include?(@featureType)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field featureType!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class AcquireEncryptedAccessToken_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRING, :name => 'success'},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -4818,44 +4604,6 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class FindAndAddContactsByPhone_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQSEQ = 1
-    PHONES = 2
-    REFERENCE = 3
-
-    FIELDS = {
-      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      PHONES => {:type => ::Thrift::Types::SET, :name => 'phones', :element => {:type => ::Thrift::Types::STRING}},
-      REFERENCE => {:type => ::Thrift::Types::STRING, :name => 'reference'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class FindAndAddContactsByPhone_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::Contact}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
   class CloseProximityMatch_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SESSIONID = 2
@@ -4873,6 +4621,40 @@ module TalkService
   end
 
   class CloseProximityMatch_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnblockRecommendation_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQSEQ = 1
+    ID = 2
+
+    FIELDS = {
+      REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
+      ID => {:type => ::Thrift::Types::STRING, :name => 'id'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class UnblockRecommendation_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
     E = 1
 
@@ -4922,11 +4704,14 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetAnalyticsInfo_args
+  class NotifyInstalled_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
+    UDIDHASH = 2
+    APPLICATIONTYPEWITHEXTENSIONS = 3
 
     FIELDS = {
-
+      UDIDHASH => {:type => ::Thrift::Types::STRING, :name => 'udidHash'},
+      APPLICATIONTYPEWITHEXTENSIONS => {:type => ::Thrift::Types::STRING, :name => 'applicationTypeWithExtensions'}
     }
 
     def struct_fields; FIELDS; end
@@ -4937,81 +4722,11 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetAnalyticsInfo_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AnalyticsInfo},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetEncryptedIdentityV3_args
+  class NotifyInstalled_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
 
     FIELDS = {
 
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetEncryptedIdentityV3_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::GetEncryptedIdentityV3Response},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifySleep_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LASTREV = 2
-    BADGE = 3
-
-    FIELDS = {
-      LASTREV => {:type => ::Thrift::Types::I64, :name => 'lastRev'},
-      BADGE => {:type => ::Thrift::Types::I32, :name => 'badge'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class NotifySleep_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
-
-    FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -5040,47 +4755,11 @@ module TalkService
 
   class AcceptChatInvitation_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-
-    FIELDS = {
-
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetMessageBoxes_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    MESSAGEBOXLISTREQUEST = 2
-    SYNCREASON = 3
-
-    FIELDS = {
-      MESSAGEBOXLISTREQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'messageBoxListRequest', :class => ::MessageBoxListRequest},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetMessageBoxes_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
     SUCCESS = 0
     E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::MessageBoxList},
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AcceptChatInvitationResponse},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5115,43 +4794,6 @@ module TalkService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::AcceptChatInvitationByTicketResponse},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetProfile_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetProfile_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Profile},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5231,6 +4873,43 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
+  class GetExtendedProfile_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetExtendedProfile_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::ExtendedProfile},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
   class DeleteOtherFromChat_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     REQUEST = 1
@@ -5254,6 +4933,45 @@ module TalkService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::DeleteOtherFromChatResponse},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetMessageBoxes_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    MESSAGEBOXLISTREQUEST = 2
+    SYNCREASON = 3
+
+    FIELDS = {
+      MESSAGEBOXLISTREQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'messageBoxListRequest', :class => ::MessageBoxListRequest},
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetMessageBoxes_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::MessageBoxList},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5299,18 +5017,18 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetSettings_args
+  class GetProfile_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SYNCREASON = 1
 
     FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -5318,13 +5036,13 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetSettings_result
+  class GetProfile_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUCCESS = 0
     E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Settings},
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Profile},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5354,9 +5072,236 @@ module TalkService
 
   class FindChatByTicket_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
 
     FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::FindChatByTicketResponse},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
 
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetRecommendationIds_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetRecommendationIds_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAllChatMids_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQUEST = 1
+    SYNCREASON = 2
+
+    FIELDS = {
+      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::GetAllChatMidsRequest},
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAllChatMids_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::GetAllChatMidsResponse},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAllContactIds_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetAllContactIds_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetBlockedContactIds_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetBlockedContactIds_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetBlockedRecommendationIds_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetBlockedRecommendationIds_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRING}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetSettings_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SYNCREASON = 1
+
+    FIELDS = {
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetSettings_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::Settings},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -5372,7 +5317,7 @@ module TalkService
     ATTRIBUTESTORETRIEVE = 2
 
     FIELDS = {
-      ATTRIBUTESTORETRIEVE => {:type => ::Thrift::Types::SET, :name => 'attributesToRetrieve', :element => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_cg}}
+      ATTRIBUTESTORETRIEVE => {:type => ::Thrift::Types::SET, :name => 'attributesToRetrieve', :element => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_dg}}
     }
 
     def struct_fields; FIELDS; end
@@ -5401,34 +5346,29 @@ module TalkService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetAllChatMids_args
+  class GetChatEffectMetaList_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQUEST = 1
-    SYNCREASON = 2
+    CATEGORIES = 1
 
     FIELDS = {
-      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::GetAllChatMidsRequest},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      CATEGORIES => {:type => ::Thrift::Types::SET, :name => 'categories', :element => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_i7}}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
     end
 
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetAllChatMids_result
+  class GetChatEffectMetaList_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
     SUCCESS = 0
     E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::GetAllChatMidsResponse},
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::ChatEffectMeta}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5463,6 +5403,79 @@ module TalkService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::InviteIntoChatResponse},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetChatRoomAnnouncementsBulk_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    CHATROOMMIDS = 2
+    SYNCREASON = 3
+
+    FIELDS = {
+      CHATROOMMIDS => {:type => ::Thrift::Types::LIST, :name => 'chatRoomMids', :element => {:type => ::Thrift::Types::STRING}},
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
+        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
+      end
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetChatRoomAnnouncementsBulk_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::ChatRoomAnnouncement}},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GenerateUserTicket_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    EXPIRATIONTIME = 3
+    MAXUSECOUNT = 4
+
+    FIELDS = {
+      EXPIRATIONTIME => {:type => ::Thrift::Types::I64, :name => 'expirationTime'},
+      MAXUSECOUNT => {:type => ::Thrift::Types::I32, :name => 'maxUseCount'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GenerateUserTicket_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    E = 1
+
+    FIELDS = {
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5526,46 +5539,9 @@ module TalkService
 
   class RejectChatInvitation_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::RejectChatInvitationResponse},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
 
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetChatEffectMetaList_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    CATEGORIES = 1
-
-    FIELDS = {
-      CATEGORIES => {:type => ::Thrift::Types::SET, :name => 'categories', :element => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_h7}}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetChatEffectMetaList_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::ChatEffectMeta}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
     def struct_fields; FIELDS; end
@@ -5585,7 +5561,7 @@ module TalkService
 
     FIELDS = {
       REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::J0_a_e_a_b_zc},
+      TYPE => {:type => ::Thrift::Types::I32, :name => 'type', :enum_class => ::P0_a_e_a_b_ad},
       TARGET => {:type => ::Thrift::Types::STRING, :name => 'target'},
       ENABLEMENT => {:type => ::Thrift::Types::BOOL, :name => 'enablement'}
     }
@@ -5593,7 +5569,7 @@ module TalkService
     def struct_fields; FIELDS; end
 
     def validate
-      unless @type.nil? || ::J0_a_e_a_b_zc::VALID_VALUES.include?(@type)
+      unless @type.nil? || ::P0_a_e_a_b_ad::VALID_VALUES.include?(@type)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field type!')
       end
     end
@@ -5606,45 +5582,6 @@ module TalkService
     E = 1
 
     FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetChatRoomAnnouncementsBulk_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    CHATROOMMIDS = 2
-    SYNCREASON = 3
-
-    FIELDS = {
-      CHATROOMMIDS => {:type => ::Thrift::Types::LIST, :name => 'chatRoomMids', :element => {:type => ::Thrift::Types::STRING}},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetChatRoomAnnouncementsBulk_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::MAP, :name => 'success', :key => {:type => ::Thrift::Types::STRING}, :value => {:type => ::Thrift::Types::STRUCT, :class => ::ChatRoomAnnouncement}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5698,7 +5635,7 @@ module TalkService
 
     FIELDS = {
       REQSEQ => {:type => ::Thrift::Types::I32, :name => 'reqSeq'},
-      ATTRIBUTESTOUPDATE => {:type => ::Thrift::Types::SET, :name => 'attributesToUpdate', :element => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_cg}},
+      ATTRIBUTESTOUPDATE => {:type => ::Thrift::Types::SET, :name => 'attributesToUpdate', :element => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_dg}},
       SETTINGS => {:type => ::Thrift::Types::STRUCT, :name => 'settings', :class => ::Settings}
     }
 
@@ -5716,44 +5653,7 @@ module TalkService
     E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::SET, :name => 'success', :element => {:type => ::Thrift::Types::I32, :enum_class => ::J0_a_e_a_b_cg}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetExtendedProfile_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SYNCREASON = 1
-
-    FIELDS = {
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
-        raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
-      end
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetExtendedProfile_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::ExtendedProfile},
+      SUCCESS => {:type => ::Thrift::Types::SET, :name => 'success', :element => {:type => ::Thrift::Types::I32, :enum_class => ::P0_a_e_a_b_dg}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -5814,13 +5714,13 @@ module TalkService
       REGIONOFTELEPHONE => {:type => ::Thrift::Types::STRING, :name => 'regionOfTelephone'},
       REGIONOFLOCALE => {:type => ::Thrift::Types::STRING, :name => 'regionOfLocale'},
       CARRIER => {:type => ::Thrift::Types::STRING, :name => 'carrier'},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -5853,13 +5753,13 @@ module TalkService
 
     FIELDS = {
       REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::GetContactsV2Request},
-      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::J0_a_e_a_b_rg}
+      SYNCREASON => {:type => ::Thrift::Types::I32, :name => 'syncReason', :enum_class => ::P0_a_e_a_b_sg}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @syncReason.nil? || ::J0_a_e_a_b_rg::VALID_VALUES.include?(@syncReason)
+      unless @syncReason.nil? || ::P0_a_e_a_b_sg::VALID_VALUES.include?(@syncReason)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field syncReason!')
       end
     end
@@ -5903,12 +5803,9 @@ module TalkService
 
   class GetRoomsV2_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Room}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+
     }
 
     def struct_fields; FIELDS; end

@@ -112,6 +112,10 @@ def api_inviteIntoChat(chatMid:, targetUserMids:)
   @client.inviteIntoChat(obj)
 end
 
+def api_generateUserTicket(expirationTime:, maxUseCount:)
+  @client.generateUserTicket(expirationTime, maxUseCount)
+end
+
 def api_reissueChatTicket(groupMid:)
   obj = ReissueChatTicketRequest.new
   obj::reqSeq = 0

@@ -7,8 +7,8 @@ module Config
   POLL_SERVICE_V4_URL = HOST_URL + "/P4"
 
   HEADERS = {
-      "User-Agent": "Mozilla/5.0 (Windows NT 6.1; rv:49.0) Gecko/20100101 Firefox/49.0",
-      "X-Line-Application": "DESKTOPWIN\t6.3.1.2337\tDESKTOP_WIN\t10;SECONDARY",
+      "User-Agent": "LLA/2.16.0 Google Pixel 5 10.0",
+      "X-Line-Application": "ANDROIDLITE\t2.16.0\tAndroid OS\t10.0;SECONDARY",
       "x-lal": "ja_jp",
   }
 

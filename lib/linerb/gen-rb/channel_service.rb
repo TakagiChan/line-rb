@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require_relative 'takagi_chan_types'
+require 'takagi_chan_types'
 
 module ChannelService
   class Client
@@ -86,13 +86,12 @@ module ChannelService
 
     def recv_updateChannelSettings()
       result = receive_message(UpdateChannelSettings_result)
-      raise result.e unless result.e.nil?
       return
     end
 
     def approveChannelAndIssueChannelToken(channelId)
       send_approveChannelAndIssueChannelToken(channelId)
-      return recv_approveChannelAndIssueChannelToken()
+      recv_approveChannelAndIssueChannelToken()
     end
 
     def send_approveChannelAndIssueChannelToken(channelId)
@@ -101,9 +100,7 @@ module ChannelService
 
     def recv_approveChannelAndIssueChannelToken()
       result = receive_message(ApproveChannelAndIssueChannelToken_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'approveChannelAndIssueChannelToken failed: unknown result')
+      return
     end
 
     def getChannelInfo(channelId, locale)
@@ -285,22 +282,14 @@ module ChannelService
     def process_updateChannelSettings(seqid, iprot, oprot)
       args = read_args(iprot, UpdateChannelSettings_args)
       result = UpdateChannelSettings_result.new()
-      begin
-        @handler.updateChannelSettings(args.channelSettings)
-      rescue ::ChannelException => e
-        result.e = e
-      end
+      @handler.updateChannelSettings(args.channelSettings)
       write_result(result, oprot, 'updateChannelSettings', seqid)
     end
 
     def process_approveChannelAndIssueChannelToken(seqid, iprot, oprot)
       args = read_args(iprot, ApproveChannelAndIssueChannelToken_args)
       result = ApproveChannelAndIssueChannelToken_result.new()
-      begin
-        result.success = @handler.approveChannelAndIssueChannelToken(args.channelId)
-      rescue ::ChannelException => e
-        result.e = e
-      end
+      @handler.approveChannelAndIssueChannelToken(args.channelId)
       write_result(result, oprot, 'approveChannelAndIssueChannelToken', seqid)
     end
 
@@ -551,10 +540,9 @@ module ChannelService
 
   class UpdateChannelSettings_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    E = 1
 
     FIELDS = {
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::ChannelException}
+
     }
 
     def struct_fields; FIELDS; end
@@ -583,12 +571,9 @@ module ChannelService
 
   class ApproveChannelAndIssueChannelToken_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::ChannelToken},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::ChannelException}
+
     }
 
     def struct_fields; FIELDS; end

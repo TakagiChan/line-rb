@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require_relative 'takagi_chan_types'
+require 'takagi_chan_types'
 
 module AccountAuthFactorEapConnectService
   class Client
@@ -201,7 +201,7 @@ module AccountAuthFactorEapConnectService
     REQUEST = 1
 
     FIELDS = {
-      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::OpenSessionRequest}
+      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::OpenSession_AAFECS_Request}
     }
 
     def struct_fields; FIELDS; end

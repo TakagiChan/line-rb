@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require_relative 'takagi_chan_types'
+require 'takagi_chan_types'
 
 module PrimaryAccountInitService
   class Client
@@ -1000,13 +1000,13 @@ module PrimaryAccountInitService
       AUTHSESSIONID => {:type => ::Thrift::Types::STRING, :name => 'authSessionId'},
       DEVICE => {:type => ::Thrift::Types::STRUCT, :name => 'device', :class => ::Device},
       USERPHONENUMBER => {:type => ::Thrift::Types::STRUCT, :name => 'userPhoneNumber', :class => ::UserPhoneNumber},
-      VERIFMETHOD => {:type => ::Thrift::Types::I32, :name => 'verifMethod', :enum_class => ::G_a_c_u0_a_b_t}
+      VERIFMETHOD => {:type => ::Thrift::Types::I32, :name => 'verifMethod', :enum_class => ::G_a_b_z0_a_b_t}
     }
 
     def struct_fields; FIELDS; end
 
     def validate
-      unless @verifMethod.nil? || ::G_a_c_u0_a_b_t::VALID_VALUES.include?(@verifMethod)
+      unless @verifMethod.nil? || ::G_a_b_z0_a_b_t::VALID_VALUES.include?(@verifMethod)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field verifMethod!')
       end
     end

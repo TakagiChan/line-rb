@@ -16,8 +16,6 @@ begin
     def initialize(auth_token:, certificate:)
       @auth = auth_token
       @cert = certificate
-
-      #authToken login is in progress
     end
 
     def client_proto(url, headers)
@@ -29,6 +27,12 @@ begin
     end
 
     def login
+
+      unless @auth.empty?
+        Config::HEADERS.store(:"X-Line-Access", @auth)
+        return
+      end
+
       protocol = client_proto(Config::LOGIN_URL, Config::HEADERS)
       login_client = SecondaryQrcodeLoginService::Client.new(protocol)
 
@@ -102,7 +106,7 @@ begin
 
             login_req = QrCodeLoginRequest.new
             login_req.authSessionId = session_id
-            login_req.systemName = "Ruby on Rails"
+            login_req.systemName = "LINELITE"
             login_req.autoLoginIsRequired = FALSE
 
             res = login_client.qrCodeLogin(login_req)

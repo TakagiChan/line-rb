@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require_relative 'takagi_chan_types'
+require 'takagi_chan_types'
 
 module CallService
   class Client
@@ -77,7 +77,7 @@ module CallService
 
     def deleteGroupCallUrl(request)
       send_deleteGroupCallUrl(request)
-      return recv_deleteGroupCallUrl()
+      recv_deleteGroupCallUrl()
     end
 
     def send_deleteGroupCallUrl(request)
@@ -86,9 +86,7 @@ module CallService
 
     def recv_deleteGroupCallUrl()
       result = receive_message(DeleteGroupCallUrl_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'deleteGroupCallUrl failed: unknown result')
+      return
     end
 
     def updateGroupCallUrl(request)
@@ -107,22 +105,6 @@ module CallService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'updateGroupCallUrl failed: unknown result')
     end
 
-    def redeemPaidCallVoucher(serial, language)
-      send_redeemPaidCallVoucher(serial, language)
-      return recv_redeemPaidCallVoucher()
-    end
-
-    def send_redeemPaidCallVoucher(serial, language)
-      send_message('redeemPaidCallVoucher', RedeemPaidCallVoucher_args, :serial => serial, :language => language)
-    end
-
-    def recv_redeemPaidCallVoucher()
-      result = receive_message(RedeemPaidCallVoucher_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'redeemPaidCallVoucher failed: unknown result')
-    end
-
     def getCallCreditPurchaseHistory(request)
       send_getCallCreditPurchaseHistory(request)
       return recv_getCallCreditPurchaseHistory()
@@ -137,6 +119,22 @@ module CallService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getCallCreditPurchaseHistory failed: unknown result')
+    end
+
+    def redeemPaidCallVoucher(serial, language)
+      send_redeemPaidCallVoucher(serial, language)
+      return recv_redeemPaidCallVoucher()
+    end
+
+    def send_redeemPaidCallVoucher(serial, language)
+      send_message('redeemPaidCallVoucher', RedeemPaidCallVoucher_args, :serial => serial, :language => language)
+    end
+
+    def recv_redeemPaidCallVoucher()
+      result = receive_message(RedeemPaidCallVoucher_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'redeemPaidCallVoucher failed: unknown result')
     end
 
     def getCallCreditProducts(appStoreCode, pgCode, country, language)
@@ -155,22 +153,6 @@ module CallService
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getCallCreditProducts failed: unknown result')
     end
 
-    def getPaidCallBalanceList(language)
-      send_getPaidCallBalanceList(language)
-      return recv_getPaidCallBalanceList()
-    end
-
-    def send_getPaidCallBalanceList(language)
-      send_message('getPaidCallBalanceList', GetPaidCallBalanceList_args, :language => language)
-    end
-
-    def recv_getPaidCallBalanceList()
-      result = receive_message(GetPaidCallBalanceList_result)
-      return result.success unless result.success.nil?
-      raise result.e unless result.e.nil?
-      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getPaidCallBalanceList failed: unknown result')
-    end
-
     def getPaidCallMetadata(language)
       send_getPaidCallMetadata(language)
       return recv_getPaidCallMetadata()
@@ -185,6 +167,22 @@ module CallService
       return result.success unless result.success.nil?
       raise result.e unless result.e.nil?
       raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getPaidCallMetadata failed: unknown result')
+    end
+
+    def getPaidCallBalanceList(language)
+      send_getPaidCallBalanceList(language)
+      return recv_getPaidCallBalanceList()
+    end
+
+    def send_getPaidCallBalanceList(language)
+      send_message('getPaidCallBalanceList', GetPaidCallBalanceList_args, :language => language)
+    end
+
+    def recv_getPaidCallBalanceList()
+      result = receive_message(GetPaidCallBalanceList_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getPaidCallBalanceList failed: unknown result')
     end
 
     def searchPaidCallUserRate(countryCode, language)
@@ -271,11 +269,7 @@ module CallService
     def process_deleteGroupCallUrl(seqid, iprot, oprot)
       args = read_args(iprot, DeleteGroupCallUrl_args)
       result = DeleteGroupCallUrl_result.new()
-      begin
-        result.success = @handler.deleteGroupCallUrl(args.request)
-      rescue ::TalkException => e
-        result.e = e
-      end
+      @handler.deleteGroupCallUrl(args.request)
       write_result(result, oprot, 'deleteGroupCallUrl', seqid)
     end
 
@@ -290,17 +284,6 @@ module CallService
       write_result(result, oprot, 'updateGroupCallUrl', seqid)
     end
 
-    def process_redeemPaidCallVoucher(seqid, iprot, oprot)
-      args = read_args(iprot, RedeemPaidCallVoucher_args)
-      result = RedeemPaidCallVoucher_result.new()
-      begin
-        result.success = @handler.redeemPaidCallVoucher(args.serial, args.language)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'redeemPaidCallVoucher', seqid)
-    end
-
     def process_getCallCreditPurchaseHistory(seqid, iprot, oprot)
       args = read_args(iprot, GetCallCreditPurchaseHistory_args)
       result = GetCallCreditPurchaseHistory_result.new()
@@ -310,6 +293,17 @@ module CallService
         result.e = e
       end
       write_result(result, oprot, 'getCallCreditPurchaseHistory', seqid)
+    end
+
+    def process_redeemPaidCallVoucher(seqid, iprot, oprot)
+      args = read_args(iprot, RedeemPaidCallVoucher_args)
+      result = RedeemPaidCallVoucher_result.new()
+      begin
+        result.success = @handler.redeemPaidCallVoucher(args.serial, args.language)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'redeemPaidCallVoucher', seqid)
     end
 
     def process_getCallCreditProducts(seqid, iprot, oprot)
@@ -323,17 +317,6 @@ module CallService
       write_result(result, oprot, 'getCallCreditProducts', seqid)
     end
 
-    def process_getPaidCallBalanceList(seqid, iprot, oprot)
-      args = read_args(iprot, GetPaidCallBalanceList_args)
-      result = GetPaidCallBalanceList_result.new()
-      begin
-        result.success = @handler.getPaidCallBalanceList(args.language)
-      rescue ::TalkException => e
-        result.e = e
-      end
-      write_result(result, oprot, 'getPaidCallBalanceList', seqid)
-    end
-
     def process_getPaidCallMetadata(seqid, iprot, oprot)
       args = read_args(iprot, GetPaidCallMetadata_args)
       result = GetPaidCallMetadata_result.new()
@@ -343,6 +326,17 @@ module CallService
         result.e = e
       end
       write_result(result, oprot, 'getPaidCallMetadata', seqid)
+    end
+
+    def process_getPaidCallBalanceList(seqid, iprot, oprot)
+      args = read_args(iprot, GetPaidCallBalanceList_args)
+      result = GetPaidCallBalanceList_result.new()
+      begin
+        result.success = @handler.getPaidCallBalanceList(args.language)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getPaidCallBalanceList', seqid)
     end
 
     def process_searchPaidCallUserRate(seqid, iprot, oprot)
@@ -525,12 +519,9 @@ module CallService
 
   class DeleteGroupCallUrl_result
     include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
 
     FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::DeleteGroupCallUrlResponse},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+
     }
 
     def struct_fields; FIELDS; end
@@ -564,6 +555,40 @@ module CallService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::UpdateGroupCallUrlResponse},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetCallCreditPurchaseHistory_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    REQUEST = 2
+
+    FIELDS = {
+      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::CoinHistoryCondition}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetCallCreditPurchaseHistory_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::CoinHistoryResult},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -611,40 +636,6 @@ module CallService
     ::Thrift::Struct.generate_accessors self
   end
 
-  class GetCallCreditPurchaseHistory_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    REQUEST = 2
-
-    FIELDS = {
-      REQUEST => {:type => ::Thrift::Types::STRUCT, :name => 'request', :class => ::CoinHistoryCondition}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetCallCreditPurchaseHistory_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::CoinHistoryResult},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
   class GetCallCreditProducts_args
     include ::Thrift::Struct, ::Thrift::Struct_Union
     APPSTORECODE = 2
@@ -653,8 +644,8 @@ module CallService
     LANGUAGE = 5
 
     FIELDS = {
-      APPSTORECODE => {:type => ::Thrift::Types::I32, :name => 'appStoreCode', :enum_class => ::J0_a_e_a_b_ge},
-      PGCODE => {:type => ::Thrift::Types::I32, :name => 'pgCode', :enum_class => ::J0_a_e_a_b_ee},
+      APPSTORECODE => {:type => ::Thrift::Types::I32, :name => 'appStoreCode', :enum_class => ::P0_a_e_a_b_he},
+      PGCODE => {:type => ::Thrift::Types::I32, :name => 'pgCode', :enum_class => ::P0_a_e_a_b_fe},
       COUNTRY => {:type => ::Thrift::Types::STRING, :name => 'country'},
       LANGUAGE => {:type => ::Thrift::Types::STRING, :name => 'language'}
     }
@@ -662,10 +653,10 @@ module CallService
     def struct_fields; FIELDS; end
 
     def validate
-      unless @appStoreCode.nil? || ::J0_a_e_a_b_ge::VALID_VALUES.include?(@appStoreCode)
+      unless @appStoreCode.nil? || ::P0_a_e_a_b_he::VALID_VALUES.include?(@appStoreCode)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field appStoreCode!')
       end
-      unless @pgCode.nil? || ::J0_a_e_a_b_ee::VALID_VALUES.include?(@pgCode)
+      unless @pgCode.nil? || ::P0_a_e_a_b_fe::VALID_VALUES.include?(@pgCode)
         raise ::Thrift::ProtocolException.new(::Thrift::ProtocolException::UNKNOWN, 'Invalid value of field pgCode!')
       end
     end
@@ -680,40 +671,6 @@ module CallService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::CoinProductItem}},
-      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetPaidCallBalanceList_args
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    LANGUAGE = 2
-
-    FIELDS = {
-      LANGUAGE => {:type => ::Thrift::Types::STRING, :name => 'language'}
-    }
-
-    def struct_fields; FIELDS; end
-
-    def validate
-    end
-
-    ::Thrift::Struct.generate_accessors self
-  end
-
-  class GetPaidCallBalanceList_result
-    include ::Thrift::Struct, ::Thrift::Struct_Union
-    SUCCESS = 0
-    E = 1
-
-    FIELDS = {
-      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::PaidCallBalance}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
@@ -748,6 +705,40 @@ module CallService
 
     FIELDS = {
       SUCCESS => {:type => ::Thrift::Types::STRUCT, :name => 'success', :class => ::PaidCallMetadataResult},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetPaidCallBalanceList_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LANGUAGE = 2
+
+    FIELDS = {
+      LANGUAGE => {:type => ::Thrift::Types::STRING, :name => 'language'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetPaidCallBalanceList_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::PaidCallBalance}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 

@@ -26,15 +26,15 @@ class PollRecv
 
   def op_process(op)
     Async do
-      if op::type == J0_a_e_a_b_nd::RECEIVE_MESSAGE
-        if op::message::toType == J0_a_e_a_b_zc::BOT
+      if op::type == P0_a_e_a_b_od::RECEIVE_MESSAGE
+        if op::message::toType == P0_a_e_a_b_ad::BOT
           return
         end
         Client.talk.send(:api_sendMessage, text: "text", to: "mid/gid",
                          #Optional you dont need pass this args
-                         :contentType => J0_a_e_a_b_c9::NONE)
+                         :contentType => P0_a_e_a_b_d9::NONE)
       end
-      if op::type == J0_a_e_a_b_nd::NOTIFIED_INVITE_INTO_CHAT
+      if op::type == P0_a_e_a_b_od::NOTIFIED_INVITE_INTO_CHAT
         gid = op::param1
         Client.talk.send(:api_acceptChatInvitation, chatMid: gid)
         Client.talk.send(:api_sendMessage, text: "text", to: gid)
