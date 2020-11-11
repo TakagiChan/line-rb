@@ -48,7 +48,7 @@ begin
       e2ee = "?secret=#{secret}" + "&e2eeVersion=#{version}"
       puts "LINE-RB: [LOGIN] => #{qr_url}#{e2ee}"
 
-      Config::HEADERS[:"X-Line-Access"] = ""
+      Config::HEADERS.store(:"X-Line-Access", session_id)
 
       protocol = client_proto(Config::PERMIT_NOTICE_URL, Config::HEADERS)
       cert_client = SecondaryQrCodeLoginPermitNoticeService::Client.new(protocol)
