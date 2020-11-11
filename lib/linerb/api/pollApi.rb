@@ -22,7 +22,7 @@ class PollApi
 
         operations.each { |op|
 
-          if op::type == J0_a_e_a_b_nd::END_OF_OPERATION || op::type == J0_a_e_a_b_nd::DUMMY
+          if op::type == P0_a_e_a_b_od::END_OF_OPERATION || op::type == P0_a_e_a_b_od::DUMMY
             next
           end
 

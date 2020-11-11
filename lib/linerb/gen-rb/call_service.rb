@@ -5,7 +5,7 @@
 #
 
 require 'thrift'
-require 'takagi_chan_types'
+require_relative 'takagi_chan_types'
 
 module CallService
   class Client

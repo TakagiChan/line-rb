@@ -89,6 +89,38 @@ module TalkService
       return
     end
 
+    def getLastOpRevision()
+      send_getLastOpRevision()
+      return recv_getLastOpRevision()
+    end
+
+    def send_getLastOpRevision()
+      send_message('getLastOpRevision', GetLastOpRevision_args)
+    end
+
+    def recv_getLastOpRevision()
+      result = receive_message(GetLastOpRevision_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'getLastOpRevision failed: unknown result')
+    end
+
+    def fetchOperations(localRev, count)
+      send_fetchOperations(localRev, count)
+      return recv_fetchOperations()
+    end
+
+    def send_fetchOperations(localRev, count)
+      send_message('fetchOperations', FetchOperations_args, :localRev => localRev, :count => count)
+    end
+
+    def recv_fetchOperations()
+      result = receive_message(FetchOperations_result)
+      return result.success unless result.success.nil?
+      raise result.e unless result.e.nil?
+      raise ::Thrift::ApplicationException.new(::Thrift::ApplicationException::MISSING_RESULT, 'fetchOperations failed: unknown result')
+    end
+
     def reportDeviceState(booleanState, stringState)
       send_reportDeviceState(booleanState, stringState)
       recv_reportDeviceState()
@@ -1522,6 +1554,28 @@ module TalkService
       write_result(result, oprot, 'sendPostback', seqid)
     end
 
+    def process_getLastOpRevision(seqid, iprot, oprot)
+      args = read_args(iprot, GetLastOpRevision_args)
+      result = GetLastOpRevision_result.new()
+      begin
+        result.success = @handler.getLastOpRevision()
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'getLastOpRevision', seqid)
+    end
+
+    def process_fetchOperations(seqid, iprot, oprot)
+      args = read_args(iprot, FetchOperations_args)
+      result = FetchOperations_result.new()
+      begin
+        result.success = @handler.fetchOperations(args.localRev, args.count)
+      rescue ::TalkException => e
+        result.e = e
+      end
+      write_result(result, oprot, 'fetchOperations', seqid)
+    end
+
     def process_reportDeviceState(seqid, iprot, oprot)
       args = read_args(iprot, ReportDeviceState_args)
       result = ReportDeviceState_result.new()
@@ -2655,6 +2709,75 @@ module TalkService
     E = 1
 
     FIELDS = {
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetLastOpRevision_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+
+    FIELDS = {
+
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class GetLastOpRevision_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::I64, :name => 'success'},
+      E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FetchOperations_args
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    LOCALREV = 2
+    COUNT = 3
+
+    FIELDS = {
+      LOCALREV => {:type => ::Thrift::Types::I64, :name => 'localRev'},
+      COUNT => {:type => ::Thrift::Types::I32, :name => 'count'}
+    }
+
+    def struct_fields; FIELDS; end
+
+    def validate
+    end
+
+    ::Thrift::Struct.generate_accessors self
+  end
+
+  class FetchOperations_result
+    include ::Thrift::Struct, ::Thrift::Struct_Union
+    SUCCESS = 0
+    E = 1
+
+    FIELDS = {
+      SUCCESS => {:type => ::Thrift::Types::LIST, :name => 'success', :element => {:type => ::Thrift::Types::STRUCT, :class => ::Operation}},
       E => {:type => ::Thrift::Types::STRUCT, :name => 'e', :class => ::TalkException}
     }
 
